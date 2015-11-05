@@ -32,7 +32,7 @@ turbine
         freeStreamVelocity  (10 0 0);
         tipSpeedRatio       6.0;
         rotorRadius         0.45;
-        
+
         dynamicStall
         {
             active              off;
@@ -47,7 +47,7 @@ turbine
                 writeElementPerf true;
                 endEffects  on;
                 nElements   28;
-                elementProfiles 
+                elementProfiles
                 (
                     cylinder
                     S826
@@ -110,7 +110,7 @@ turbine
                 azimuthalOffset 240.0;
             }
         }
-        
+
         tower
         {
             includeInTotalDrag  false; // default is false
@@ -124,7 +124,7 @@ turbine
                 (-0.14  0.00 0.05)
             );
         }
-        
+
         hub
         {
             nElements   1;
@@ -135,12 +135,12 @@ turbine
                 (0 -0.09 0.09)
             );
         }
-        
+
         profileData
         {
             S826
             {
-                data (#include "../../resources/foilData/S826_1e5_Ostavan");
+                data (#include "S826_1e5_Ostavan");
             }
             cylinder
             {
