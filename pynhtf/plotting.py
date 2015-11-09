@@ -66,19 +66,17 @@ def plot_meancontquiv(turbine="turbine2"):
     mean_w = load_vel_map(turbine=turbine, component="w")
     y_R = np.round(np.asarray(mean_u.columns.values, dtype=float), decimals=4)
     z_R = np.asarray(mean_u.index.values, dtype=float)
-    plt.figure(figsize=(7, 9))
+    plt.figure(figsize=(7.5, 6))
     # Add contours of mean velocity
     cs = plt.contourf(y_R, z_R, mean_u/U, 20, cmap=plt.cm.coolwarm)
-    cb = plt.colorbar(cs, shrink=1, extend="both",
-                      orientation="horizontal", pad=0.1)
-                      #ticks=np.round(np.linspace(0.44, 1.12, 10), decimals=2))
+    cb = plt.colorbar(cs, orientation="vertical")
     cb.set_label(r"$U/U_{\infty}$")
     # Make quiver plot of v and w velocities
     Q = plt.quiver(y_R, z_R, mean_v/U, mean_w/U, angles="xy", width=0.0022,
                    edgecolor="none", scale=3.0)
     plt.xlabel(r"$y/R$")
     plt.ylabel(r"$z/R$")
-    plt.quiverkey(Q, 0.8, 0.21, 0.1, r"$0.1 U_\infty$",
+    plt.quiverkey(Q, 0.65, 0.045, 0.1, r"$0.1 U_\infty$",
                labelpos="E",
                coordinates="figure",
                fontproperties={"size": "small"})
