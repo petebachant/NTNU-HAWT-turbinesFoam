@@ -8,7 +8,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import os
 import sys
-from modules.processing import *
+from pynhtf.processing import *
 
 
 def plot_meancontquiv():
