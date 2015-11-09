@@ -11,7 +11,7 @@ import sys
 # Input parameters
 setformat = "csv"
 interpscheme = "cellPoint"
-fields = ["UMean", "kMean"]
+fields = ["UMean", "UPrime2Mean", "kMean"]
 R = 0.45
 D = R*2
 x_D = 1.0
@@ -59,7 +59,7 @@ def main():
         if turbine == "turbine2":
             x += x_turbine2
         for z in z_array:
-            txt += "    " + turbine + "_profile_" + str(z/R) + "\n"
+            txt += "    " + turbine + "_" + str(z/R) + "\n"
             txt += "    { \n"
             txt += "        type        uniform; \n"
             txt += "        axis        y; \n"

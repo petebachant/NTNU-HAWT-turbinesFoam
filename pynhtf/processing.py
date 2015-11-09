@@ -22,61 +22,102 @@ A = np.pi*R**2
 rho = 1000.0
 
 
-def loadwake(time):
-    """Loads wake data and returns y/R and statistics."""
-    # Figure out if time is an int or float
-    if not isinstance(time, str):
-        if time % 1 == 0:
-            folder = str(int(time))
-        else:
-            folder = str(time)
-    else:
-        folder = time
-    flist = os.listdir("postProcessing/sets/"+folder)
-    data = {}
+def load_u_profile(turbine="turbine2", z_R=0.0):
+    """
+    Loads data from the sampled mean velocity and returns it as a pandas
+    `DataFrame`.
+    """
+    z_H = float(z_H)
+    timedirs = os.listdir("postProcessing/sets")
+    latest_time = max(timedirs)
+    fname = "{}_{}_UMean.csv".format(turbine, z_R)
+    data = pd.read_csv(os.path.join("postProcessing", "sets", latest_time,
+                       fname))
+    df = pd.DataFrame()
+    df["y_R"] = data["y"]/R
+    df["u"] = data["UMean_0"]
+    return df
+
+
+def load_vel_map(turbine="turbine2", component="u"):
+    """
+    Loads all mean streamwise velocity profiles. Returns a `DataFrame` with
+    `z_R` as the index and `y_R` as columns.
+    """
+    # Define columns in set raw data file
+    columns = dict(u=0, v=1, w=2)
+    sets_dir = os.path.join("postProcessing", "sets")
+    latest_time = max(os.listdir(sets_dir))
+    data_dir = os.path.join(sets_dir, latest_time)
+    flist = os.listdir(data_dir)
+    z_R = []
     for fname in flist:
-        fpath = "postProcessing/sets/"+folder+"/"+fname
-        z_R = float(fname.split("_")[1])
-        data[z_R] = np.loadtxt(fpath, unpack=True)
-    return data
+        if "UMean" in fname:
+            z_R.append(float(fname.split("_")[1]))
+    z_R.sort()
+    z_R.reverse()
+    vel = []
+    for zi in z_R:
+        fname = "{}_{}_UMean.csv".format(turbine, zi)
+        dfi = pd.read_csv(os.path.join(data_dir, fname))
+        vel.append(dfi["UMean_{}".format(columns[component])].values)
+    y_R = dfi["y"]/R
+    z_R = np.asarray(z_R)
+    vel = np.array(vel).reshape((len(z_R), len(y_R)))
+    df = pd.DataFrame(vel, index=z_R, columns=y_R)
+    return df
 
 
-def calcwake(t1=0.0):
-    times = os.listdir("postProcessing/sets")
-    times = [float(time) for time in times]
-    times.sort()
-    times = np.asarray(times)
-    data = loadwake(times[0])
-    z_R = np.asarray(sorted(data.keys()))
-    y_R = data[z_R[0]][0]/R
-    # Find first timestep from which to average over
-    t = times[times >= t1]
-    # Assemble 3-D arrays, with time as first index
-    u = np.zeros((len(t), len(z_R), len(y_R)))
-    v = np.zeros((len(t), len(z_R), len(y_R)))
-    w = np.zeros((len(t), len(z_R), len(y_R)))
-    xvorticity = np.zeros((len(t), len(z_R), len(y_R)))
-    # Loop through all times
-    for n in range(len(t)):
-        data = loadwake(t[n])
-        for m in range(len(z_R)):
-            u[n,m,:] = data[z_R[m]][1]
-            v[n,m,:] = data[z_R[m]][2]
-            w[n,m,:] = data[z_R[m]][3]
-            try:
-                xvorticity[n,m,:] = data[z_R[m]][4]
-            except IndexError:
-                pass
-    meanu = u.mean(axis=0)
-    meanv = v.mean(axis=0)
-    meanw = w.mean(axis=0)
-    xvorticity = xvorticity.mean(axis=0)
-    return {"meanu" : meanu,
-            "meanv" : meanv,
-            "meanw" : meanw,
-            "xvorticity" : xvorticity,
-            "y/R" : y_R,
-            "z/R" : z_R}
+def load_k_profile(turbine="turbine2", z_R=0.0):
+    """
+    Loads data from the sampled `UPrime2Mean` and `kMean` (if available) and
+    returns it as a pandas `DataFrame`.
+    """
+    z_R = float(z_R)
+    df = pd.DataFrame()
+    timedirs = os.listdir("postProcessing/sets")
+    latest_time = max(timedirs)
+    fname_u = "{}_{}_UPrime2Mean.csv".format(turbine, z_R)
+    fname_k = "{}_{}_kMean.csv".format(turbine, z_R)
+    dfi = pd.read_csv(os.path.join("postProcessing", "sets", latest_time,
+                      fname_u))
+    df["y_R"] = dfi.y/R
+    df["k_resolved"] = 0.5*(dfi.UPrime2Mean_0 + dfi.UPrime2Mean_3
+                            + dfi.UPrime2Mean_5)
+    try:
+        dfi = pd.read_csv(os.path.join("postProcessing", "sets", latest_time,
+                          fname_k))
+        df["k_modeled"] = dfi.kMean
+        df["k_total"] = df.k_modeled + df.k_resolved
+    except FileNotFoundError:
+        df["k_modeled"] = np.zeros(len(df.y_R))*np.nan
+        df["k_total"] = df.k_resolved
+    return df
+
+
+def load_k_map(amount="total"):
+    """
+    Loads all TKE profiles. Returns a `DataFrame` with `z_H` as the index and
+    `y_R` as columns.
+    """
+    sets_dir = os.path.join("postProcessing", "sets")
+    latest_time = max(os.listdir(sets_dir))
+    data_dir = os.path.join(sets_dir, latest_time)
+    flist = os.listdir(data_dir)
+    z_H = []
+    for fname in flist:
+        if "UPrime2Mean" in fname:
+            z_H.append(float(fname.split("_")[1]))
+    z_H.sort()
+    z_H.reverse()
+    k = []
+    for z_H_i in z_H:
+        dfi = load_k_profile(z_H_i)
+        k.append(dfi["k_" + amount].values)
+    y_R = dfi.y_R.values
+    k = np.array(k).reshape((len(z_H), len(y_R)))
+    df = pd.DataFrame(k, index=z_H, columns=y_R)
+    return df
 
 
 def load_perf(turbine="turbine1", angle0=4000.0, verbose=True):

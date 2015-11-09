@@ -60,38 +60,21 @@ def plot_spanwise():
     fig.tight_layout()
 
 
-def load_perf(turbine="turbine1", angle0=4000.0, verbose=True):
-    """Load turbine performance data."""
-    df = pd.read_csv("postProcessing/turbines/0/{}.csv".format(turbine))
-    df = df.drop_duplicates("time", take_last=True)
-    if df.angle_deg.max() < angle0:
-        angle0 = 0.0
-    if verbose:
-        print("{} performance from {:.1f}--{:.1f} degrees:".format(
-                turbine, angle0, df.angle_deg.max()))
-        print("Mean TSR = {:.2f}".format(df.tsr[df.angle_deg >= angle0].mean()))
-        print("Mean C_P = {:.2f}".format(df.cp[df.angle_deg >= angle0].mean()))
-        print("Mean C_D = {:.2f}".format(df.cd[df.angle_deg >= angle0].mean()))
-    return df
-
-
-
-def plot_meancontquiv():
-    data = calcwake(t1=0.4)
-    y_R = data["y/R"]
-    z_R = data["z/R"]
-    u = data["meanu"]
-    v = data["meanv"]
-    w = data["meanw"]
+def plot_meancontquiv(turbine="turbine2"):
+    mean_u = load_vel_map(turbine=turbine, component="u")
+    mean_v = load_vel_map(turbine=turbine, component="v")
+    mean_w = load_vel_map(turbine=turbine, component="w")
+    y_R = np.round(np.asarray(mean_u.columns.values, dtype=float), decimals=4)
+    z_R = np.asarray(mean_u.index.values, dtype=float)
     plt.figure(figsize=(7, 9))
     # Add contours of mean velocity
-    cs = plt.contourf(y_R, z_R, u/U, 20, cmap=plt.cm.coolwarm)
+    cs = plt.contourf(y_R, z_R, mean_u/U, 20, cmap=plt.cm.coolwarm)
     cb = plt.colorbar(cs, shrink=1, extend="both",
                       orientation="horizontal", pad=0.1)
                       #ticks=np.round(np.linspace(0.44, 1.12, 10), decimals=2))
     cb.set_label(r"$U/U_{\infty}$")
     # Make quiver plot of v and w velocities
-    Q = plt.quiver(y_R, z_R, v/U, w/U, angles="xy", width=0.0022,
+    Q = plt.quiver(y_R, z_R, mean_v/U, mean_w/U, angles="xy", width=0.0022,
                    edgecolor="none", scale=3.0)
     plt.xlabel(r"$y/R$")
     plt.ylabel(r"$z/R$")
