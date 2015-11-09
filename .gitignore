@@ -13,3 +13,4 @@ constant/polyMesh/*
 constant/cellToRegion
 *.OpenFOAM
 *.pyc
+system/sampleDict
