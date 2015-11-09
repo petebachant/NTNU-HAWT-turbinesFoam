@@ -26,20 +26,6 @@ ylabels = {"meanu" : r"$U/U_\infty$",
            "meanv" : r"$V/U_\infty$",
            "meanw" : r"$W/U_\infty$",
            "meanuv" : r"$\overline{u'v'}/U_\infty^2$"}
-           
-
-class WakeMap(object):
-    """
-    Object that represents a wake map or statistics.
-    """
-    def __init__(self):
-        self.load()
-        
-    def load_single_time(self, time):
-        """
-        Loads data from a single time step.
-        """
-        timedir = "postProcessing/sets/{}".format(time)
 
 
 def loadwake(time):
@@ -59,7 +45,8 @@ def loadwake(time):
         z_R = float(fname.split("_")[1])
         data[z_R] = np.loadtxt(fpath, unpack=True)
     return data
-    
+
+
 def calcwake(t1=0.0):
     times = os.listdir("postProcessing/sets")
     times = [float(time) for time in times]
@@ -94,9 +81,10 @@ def calcwake(t1=0.0):
             "meanv" : meanv,
             "meanw" : meanw,
             "xvorticity" : xvorticity,
-            "y/R" : y_R, 
+            "y/R" : y_R,
             "z/R" : z_R}
-    
+
+
 def plot_al_perf(name="blade1"):
     df_turb = pd.read_csv("postProcessing/turbines/0/turbine.csv")
     df_turb = df_turb.drop_duplicates("time", take_last=True)
@@ -113,10 +101,12 @@ def plot_al_perf(name="blade1"):
     plt.xlabel("Azimuthal angle (degrees)")
     plt.ylabel("Relative velocity (m/s)")
     plt.tight_layout()
-    
+
+
 def plot_blade_perf():
     plot_al_perf("blade1")
-    
+
+
 def plot_spanwise():
     elements_dir = "postProcessing/actuatorLineElements/0"
     elements = os.listdir(elements_dir)
@@ -138,4 +128,18 @@ def plot_spanwise():
     for a in ax:
         a.set_xlabel("$r/R$")
     fig.tight_layout()
-    
+
+
+def load_perf(turbine="turbine1", angle0=4000.0, verbose=True):
+    """Load turbine performance data."""
+    df = pd.read_csv("postProcessing/turbines/0/{}.csv".format(turbine))
+    df = df.drop_duplicates("time", take_last=True)
+    if df.angle_deg.max() < angle0:
+        angle0 = 0.0
+    if verbose:
+        print("{} performance from {:.1f}--{:.1f} degrees:".format(
+                turbine, angle0, df.angle_deg.max()))
+        print("Mean TSR = {:.2f}".format(df.tsr[df.angle_deg >= angle0].mean()))
+        print("Mean C_P = {:.2f}".format(df.cp[df.angle_deg >= angle0].mean()))
+        print("Mean C_D = {:.2f}".format(df.cd[df.angle_deg >= angle0].mean()))
+    return df
