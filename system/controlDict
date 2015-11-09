@@ -54,6 +54,51 @@ libs
     "libturbinesFoam.so"
 );
 
+functions
+{
+    fieldAverage
+    {
+        type            fieldAverage;
+        functionObjectLibs ("libfieldFunctionObjects.so");
+        enabled         true;
+        timeStart       1.0;
+        outputControl   outputTime;
+        resetOnRestart  true;
+        resetOnOutput   false;
+
+        fields
+        (
+            U
+            {
+                mean        on;
+                prime2Mean  on;
+                base        time;
+            }
+
+            p
+            {
+                mean        on;
+                prime2Mean  off;
+                base        time;
+            }
+
+            nut
+            {
+                mean        on;
+                prime2Mean  off;
+                base        time;
+            }
+
+            k
+            {
+                mean        on;
+                prime2Mean  off;
+                base        time;
+            }
+        );
+    }
+}
+
 DebugSwitches
 {
     axialFlowTurbineALSource 0;
