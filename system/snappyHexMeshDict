@@ -147,7 +147,7 @@ castellatedMeshControls
 
     refinementRegions
     {
-        refinementBox
+        "(refinementBox1|refinementBox2)"
         {
             mode        inside;
             levels      ((1e15 1));
