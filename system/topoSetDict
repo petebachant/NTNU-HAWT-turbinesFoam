@@ -18,41 +18,80 @@ FoamFile
 actions
 (
     {
-        name 	turbine;
+        name 	turbine1;
         type	cellSet;
         action	new;
         source	cylinderToCell;
         sourceInfo
         {
-            type cylinder; 
+            type cylinder;
             p1 (-0.25 0 0);
             p2 (0.25 0 0);
-            radius 0.6; 
+            radius 0.6;
         }
     }
 
     {
-        name 	turbine;
+        name 	turbine1;
         type	cellSet;
         action	add;
         source	cylinderToCell;
         sourceInfo
         {
-            type cylinder; 
-            p1 (0.14 0 -0.82);
-            p2 (0.14 0 0);
+            type cylinder;
+            p1 (0.48 0 -0.82); // 0.48 is a guess from Pierella et al drawing
+            p2 (0.48 0 0);
             radius 0.1;
         }
     }
 
     {
-        name    turbine;
+        name    turbine1;
         type    cellZoneSet;
         action  new;
         source  setToCellZone;
         sourceInfo
         {
-            set turbine;
+            set turbine1;
+        }
+    }
+
+    {
+        name 	turbine2;
+        type	cellSet;
+        action	new;
+        source	cylinderToCell;
+        sourceInfo
+        {
+            type cylinder;
+            p1 (2.432 0 0);
+            p2 (2.932 0 0);
+            radius 0.6;
+        }
+    }
+
+    {
+        name 	turbine2;
+        type	cellSet;
+        action	add;
+        source	cylinderToCell;
+        sourceInfo
+        {
+            type cylinder;
+            p1 (2.822 0 -0.82);
+            p2 (2.822 0 0);
+            radius 0.1;
+        }
+    }
+
+    {
+        name    turbine2;
+        type    cellZoneSet;
+        action  new;
+        source  setToCellZone;
+        sourceInfo
+        {
+            set turbine2;
         }
     }
 );
