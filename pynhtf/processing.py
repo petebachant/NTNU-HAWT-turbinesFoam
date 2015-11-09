@@ -1,8 +1,8 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
 """
-Processing functions for crossFlowTurbineAL tutorial.
+Processing functions.
 """
+
 from __future__ import division, print_function
 import matplotlib.pyplot as plt
 import re
@@ -20,12 +20,6 @@ U_infty = U
 D = R*2
 A = np.pi*R**2
 rho = 1000.0
-
-ylabels = {"meanu" : r"$U/U_\infty$",
-           "stdu" : r"$\sigma_u/U_\infty$",
-           "meanv" : r"$V/U_\infty$",
-           "meanw" : r"$W/U_\infty$",
-           "meanuv" : r"$\overline{u'v'}/U_\infty^2$"}
 
 
 def loadwake(time):
@@ -83,51 +77,6 @@ def calcwake(t1=0.0):
             "xvorticity" : xvorticity,
             "y/R" : y_R,
             "z/R" : z_R}
-
-
-def plot_al_perf(name="blade1"):
-    df_turb = pd.read_csv("postProcessing/turbines/0/turbine.csv")
-    df_turb = df_turb.drop_duplicates("time", take_last=True)
-    df = pd.read_csv("postProcessing/actuatorLines/0/{}.csv".format(name))
-    df = df.drop_duplicates("time", take_last=True)
-    df["angle_deg"] = df_turb.angle_deg
-    plt.figure()
-    plt.plot(df.angle_deg, df.alpha_deg)
-    plt.xlabel("Azimuthal angle (degrees)")
-    plt.ylabel("Angle of attack (degrees)")
-    plt.tight_layout()
-    plt.figure()
-    plt.plot(df.angle_deg, df.rel_vel_mag)
-    plt.xlabel("Azimuthal angle (degrees)")
-    plt.ylabel("Relative velocity (m/s)")
-    plt.tight_layout()
-
-
-def plot_blade_perf():
-    plot_al_perf("blade1")
-
-
-def plot_spanwise():
-    elements_dir = "postProcessing/actuatorLineElements/0"
-    elements = os.listdir(elements_dir)
-    dfs = {}
-    r_R = np.zeros(len(elements))
-    fx = np.zeros(len(elements))
-    ft = np.zeros(len(elements))
-    for e in elements:
-        i = int(e.replace("blade1Element", "").replace(".csv", ""))
-        df = pd.read_csv(os.path.join(elements_dir, e))
-        r_R[i] = np.sqrt(df.y**2 + df.z**2).iloc[-1]/R
-        fx[i] = df.fx.iloc[-1]
-        ft[i] = np.sqrt(df.fy**2 + df.fz**2).iloc[-1]
-    fig, ax = plt.subplots(nrows=1, ncols=2, figsize=(7.5, 3.25))
-    ax[0].plot(r_R, 2*ft/(U_infty**2*R))
-    ax[0].set_ylabel(r"$F_\theta / (\rho R U_\infty^2)$")
-    ax[1].plot(r_R, 2*fx/(R*U_infty**2))
-    ax[1].set_ylabel(r"$F_x / (\rho R U_\infty^2 )$")
-    for a in ax:
-        a.set_xlabel("$r/R$")
-    fig.tight_layout()
 
 
 def load_perf(turbine="turbine1", angle0=4000.0, verbose=True):
