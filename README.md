@@ -12,6 +12,13 @@ The purpose of this simulation is to test the ability to predict:
 4. Tasks 2 and 3 for the offset turbines described in Krogstad et al. (2015) "' Blind Test 3' calculations of the performance and wake development behind two in-line and offset model wind turbines".
 
 
+## Citation
+
+[![DOI](https://zenodo.org/badge/4234/petebachant/NTNU-HAWT-turbinesFoam.svg)](https://zenodo.org/badge/latestdoi/4234/petebachant/NTNU-HAWT-turbinesFoam)
+
+This case can be cited via DOI. Follow the link above for more information.
+
+
 ## License
 
 Code is MIT licensed. See LICENSE for details.
