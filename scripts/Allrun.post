@@ -1,0 +1,8 @@
+#!/usr/bin/env sh
+
+# Source tutorial run functions
+. $WM_PROJECT_DIR/bin/tools/RunFunctions
+
+runApplication execFlowFunctionObjects -dict system/controlDict.post -noFlow -latestTime
+python scripts/gensampledict.py
+runApplication sample -latestTime

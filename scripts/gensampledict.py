@@ -11,7 +11,7 @@ import sys
 # Input parameters
 setformat = "csv"
 interpscheme = "cellPoint"
-fields = ["UMean", "UPrime2Mean", "kMean"]
+fields = ["UMean", "UPrime2Mean", "kMean", "RMeanXX"]
 R = 0.45
 D = R*2
 x_D = 1.0

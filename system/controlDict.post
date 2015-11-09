@@ -1,0 +1,113 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  2.4.x                                 |
+|   \\  /    A nd           | Web:      www.OpenFOAM.org                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    location    "system";
+    object      controlDict;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+#include "controlDict"
+#inputMode overwrite
+
+functions
+{
+    readFields
+    {
+        functionObjectLibs ("libfieldFunctionObjects.so");
+        type            readFields;
+        fields          (pMean UMean kMean nutMean);
+    }
+
+    postProcessFields
+    {
+        functionObjectLibs ("libutilityFunctionObjects.so");
+        type coded;
+        // Name of on-the-fly generated functionObject
+        redirectType postProcessFields;
+        code
+        #{
+            const volVectorField& UMean
+                = mesh().lookupObject<volVectorField>("UMean");
+            const volScalarField UMeanX = UMean.component(0);
+            const volScalarField& pMean
+                = mesh().lookupObject<volScalarField>("pMean");
+            const volScalarField& kMean
+                = mesh().lookupObject<volScalarField>("kMean");
+            const volScalarField& nutMean
+                = mesh().lookupObject<volScalarField>("nutMean");
+
+            volVectorField gradPMean = fvc::grad(pMean);
+
+            volScalarField gradPMeanX
+            (
+                IOobject
+                (
+                    "gradPMeanX",
+                    mesh().time().timeName(),
+                    mesh(),
+                    IOobject::NO_READ,
+                    IOobject::AUTO_WRITE
+                ),
+                gradPMean.component(0)
+            );
+
+            volVectorField gradUMeanX
+            (
+                IOobject
+                (
+                    "gradUMeanX",
+                    mesh().time().timeName(),
+                    mesh(),
+                    IOobject::NO_READ,
+                    IOobject::AUTO_WRITE
+                ),
+                fvc::grad(UMeanX)
+            );
+
+            volScalarField laplacianUMeanX
+            (
+                IOobject
+                (
+                    "laplacianUMeanX",
+                    mesh().time().timeName(),
+                    mesh(),
+                    IOobject::NO_READ,
+                    IOobject::AUTO_WRITE
+                ),
+                fvc::laplacian(UMeanX)
+            );
+
+            volSymmTensorField R = (((2.0/3.0)*I)*kMean
+                                 - nutMean*twoSymm(fvc::grad(UMean)));
+
+            volScalarField RMeanXX
+            (
+                IOobject
+                (
+                    "RMeanXX",
+                    mesh().time().timeName(),
+                    mesh(),
+                    IOobject::NO_READ,
+                    IOobject::AUTO_WRITE
+                ),
+                R.component(tensor::XX)
+            );
+
+            gradPMeanX.write();
+            gradUMeanX.write();
+            laplacianUMeanX.write();
+            RMeanXX.write();
+        #};
+    }
+}
+
+// ************************************************************************* //
