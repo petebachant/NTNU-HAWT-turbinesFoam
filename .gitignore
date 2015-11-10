@@ -15,3 +15,4 @@ constant/cellToRegion
 *.pyc
 system/sampleDict
 dynamicCode
+figures
