@@ -63,7 +63,7 @@ def load_vel_map(turbine="turbine2", component="u"):
         vel.append(dfi["UMean_{}".format(columns[component])].values)
     y_R = dfi["y"]/R
     z_R = np.asarray(z_R)
-    vel = np.array(vel).reshape((len(z_R), len(y_R)))
+    vel = np.asarray(vel).reshape((len(z_R), len(y_R)))
     df = pd.DataFrame(vel, index=z_R, columns=y_R)
     return df
 

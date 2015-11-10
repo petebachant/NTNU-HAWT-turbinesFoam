@@ -66,7 +66,7 @@ def plot_meancontquiv(turbine="turbine2"):
     mean_w = load_vel_map(turbine=turbine, component="w")
     y_R = np.round(np.asarray(mean_u.columns.values, dtype=float), decimals=4)
     z_R = np.asarray(mean_u.index.values, dtype=float)
-    plt.figure(figsize=(7.5, 6))
+    plt.figure(figsize=(7.5, 4.1))
     # Add contours of mean velocity
     cs = plt.contourf(y_R, z_R, mean_u/U, 20, cmap=plt.cm.coolwarm)
     cb = plt.colorbar(cs, orientation="vertical")
