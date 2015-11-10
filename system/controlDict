@@ -82,7 +82,7 @@ functions
                 base        time;
             }
 
-            nut
+            B
             {
                 mean        on;
                 prime2Mean  off;

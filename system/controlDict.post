@@ -40,10 +40,6 @@ functions
             const volScalarField UMeanX = UMean.component(0);
             const volScalarField& pMean
                 = mesh().lookupObject<volScalarField>("pMean");
-            const volScalarField& kMean
-                = mesh().lookupObject<volScalarField>("kMean");
-            // const volScalarField& nuSGSMean
-            //     = mesh().lookupObject<volScalarField>("nuSGSMean");
 
             volVectorField gradPMean = fvc::grad(pMean);
 
@@ -86,8 +82,9 @@ functions
                 fvc::laplacian(UMeanX)
             );
 
-            // volSymmTensorField R = (((2.0/3.0)*I)*kMean
-            //                      - nutMean*twoSymm(fvc::grad(UMean)));
+
+            const volSymmTensorField& BMean
+                = mesh().lookupObject<volSymmTensorField>("BMean");
 
             volScalarField RMeanXX
             (
@@ -99,7 +96,7 @@ functions
                     IOobject::NO_READ,
                     IOobject::AUTO_WRITE
                 ),
-                0.0*gradPMeanX
+                B.component(tensor::XX)
             );
 
             gradPMeanX.write();
