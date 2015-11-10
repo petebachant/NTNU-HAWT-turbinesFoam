@@ -41,7 +41,7 @@ actions
             type cylinder;
             p1 (0.48 0 -0.82); // 0.48 is a guess from Pierella et al drawing
             p2 (0.48 0 0);
-            radius 0.1;
+            radius 0.15;
         }
     }
 
