@@ -12,3 +12,4 @@ runApplication snappyHexMesh -overwrite
 runApplication topoSet
 runApplication pimpleFoam
 runApplication vorticity
+scripts/Allrun.post
