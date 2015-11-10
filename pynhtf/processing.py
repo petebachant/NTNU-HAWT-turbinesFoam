@@ -27,7 +27,7 @@ def load_u_profile(turbine="turbine2", z_R=0.0):
     Loads data from the sampled mean velocity and returns it as a pandas
     `DataFrame`.
     """
-    z_H = float(z_H)
+    z_R = float(z_R)
     timedirs = os.listdir("postProcessing/sets")
     latest_time = max(timedirs)
     fname = "{}_{}_UMean.csv".format(turbine, z_R)
@@ -117,6 +117,28 @@ def load_k_map(amount="total"):
     y_R = dfi.y_R.values
     k = np.array(k).reshape((len(z_H), len(y_R)))
     df = pd.DataFrame(k, index=z_H, columns=y_R)
+    return df
+
+
+def load_upup_profile(turbine="turbine2", z_R=0.0):
+    """
+    Loads data from the sampled `UPrime2Mean` and `RMeanXX` and
+    returns it as a pandas `DataFrame`.
+    """
+    z_R = float(z_R)
+    df = pd.DataFrame()
+    timedirs = os.listdir("postProcessing/sets")
+    latest_time = max(timedirs)
+    fname_u = "{}_{}_UPrime2Mean.csv".format(turbine, z_R)
+    fname_k = "{}_{}_kMean_RMeanXX.csv".format(turbine, z_R)
+    dfi = pd.read_csv(os.path.join("postProcessing", "sets", latest_time,
+                      fname_u))
+    df["y_R"] = dfi.y/R
+    df["upup_resolved"] = dfi.UPrime2Mean_0
+    dfi = pd.read_csv(os.path.join("postProcessing", "sets", latest_time,
+                      fname_k))
+    df["upup_modeled"] = dfi.RMeanXX
+    df["upup_total"] = df.upup_modeled + df.upup_resolved
     return df
 
 

@@ -89,6 +89,34 @@ def plot_meancontquiv(turbine="turbine2"):
     plt.tight_layout()
 
 
+def plot_upup_profile(amount="total", turbine="turbine2", z_R=0.0, ax=None):
+    """Plot the streamwise velocity variance."""
+    if ax is None:
+        fig, ax = plt.subplots()
+    df = load_upup_profile(turbine=turbine, z_R=z_R)
+    ax.plot(df.y_R, df["upup_" + amount]/U**2, "-o")
+    ax.set_xlabel("$y/R$")
+    ax.set_ylabel(r"$\overline{u^\prime u^\prime}/U_\infty^2$")
+    try:
+        fig.tight_layout()
+    except UnboundLocalError:
+        pass
+
+
+def plot_u_profile(turbine="turbine2", z_R=0.0, ax=None):
+    """Plot mean streamwise velocity."""
+    if ax is None:
+        fig, ax = plt.subplots()
+    df = load_u_profile(turbine=turbine, z_R=z_R)
+    ax.plot(df.y_R, df.u/U, "-o")
+    ax.set_xlabel("$y/R$")
+    ax.set_ylabel(ylabels["meanu"])
+    try:
+        fig.tight_layout()
+    except UnboundLocalError:
+        pass
+
+
 def plot_cp(angle0=4000.0, turbine="both"):
     turbine = str(turbine)
     fig, ax = plt.subplots()
