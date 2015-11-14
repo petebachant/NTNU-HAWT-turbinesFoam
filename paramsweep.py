@@ -36,7 +36,7 @@ def set_params(args):
     call(cmd, shell=True)
 
 
-def single_turbine_tsr_sweep(turbine="turbine1", start=1, stop=12, step=1,
+def single_turbine_tsr_sweep(start=1, stop=12, step=1, turbine="turbine1",
                              tsr_other_turbine=4, other_turbine_active="on",
                              append=False):
     """Run over multiple TSRs. `stop` will be included."""
@@ -72,4 +72,4 @@ def single_turbine_tsr_sweep(turbine="turbine1", start=1, stop=12, step=1,
 
 
 if __name__ == "__main__":
-    tsr_sweep(1, 12, 1, append=False)
+    single_turbine_tsr_sweep(1, 12, 1, append=False)
