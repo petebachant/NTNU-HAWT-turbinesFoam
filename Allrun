@@ -7,6 +7,9 @@ cd ${0%/*} || exit 1    # run from this directory
 # Copy initial conditions
 cp -rf 0.org 0
 
+# Set turbine parameters
+python scripts/set_turbines.py "$@"
+
 runApplication blockMesh
 runApplication snappyHexMesh -overwrite
 runApplication topoSet
