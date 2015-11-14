@@ -68,7 +68,7 @@ def single_turbine_tsr_sweep(start=1, stop=12, step=1, turbine="turbine1",
             print("Running pimpleFoam")
             call("pimpleFoam > log.pimpleFoam", shell=True)
         os.rename("log.pimpleFoam", "log.pimpleFoam." + str(tsr))
-        log_perf(append=True)
+        log_perf(param=turbine + "_tsr", append=True)
 
 
 if __name__ == "__main__":
