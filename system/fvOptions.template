@@ -6,43 +6,43 @@
 |    \\/     M anipulation  |                                                 |
 \*---------------------------------------------------------------------------*/
 FoamFile
-{
+{{
     version     2.0;
     format      ascii;
     class       dictionary;
     location    "system";
     object      fvOptions;
-}
+}}
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
 
 turbine1
-{
+{{
     type            axialFlowTurbineALSource;
-    active          on;
+    active          {turbine1_active};
     selectionMode   cellSet; // cellSet || points || cellZone
     cellSet         turbine1;
 
     axialFlowTurbineALSourceCoeffs
-    {
+    {{
         fieldNames          (U);
-        origin              (0 0 0);
+        origin              ({turbine1_x} 0 0);
         axis                (-1 0 0);
         verticalDirection   (0 0 1);
         freeStreamVelocity  (10 0 0);
-        tipSpeedRatio       6.0;
+        tipSpeedRatio       {turbine1_tsr};
         rotorRadius         0.45;
 
         dynamicStall
-        {
+        {{
             active              off;
             dynamicStallModel   LeishmanBeddoes;
-        }
+        }}
 
         blades
-        {
+        {{
             blade1
-            {
+            {{
                 writePerf   true;
                 writeElementPerf true;
                 endEffects  on;
@@ -96,23 +96,23 @@ turbine1
                     (0.0 0.4275 0.0 0.0267804 0.25 1.097)
                     (0.0 0.4424985 0.0 0.02592585 0.25 -0.71674)
                 );
-            }
+            }}
             blade2
-            {
+            {{
                 $blade1;
                 writePerf   false;
                 writeElementPerf false;
                 azimuthalOffset 120.0;
-            }
+            }}
             blade3
-            {
+            {{
                 $blade2;
                 azimuthalOffset 240.0;
-            }
-        }
+            }}
+        }}
 
         tower
-        {
+        {{
             includeInTotalDrag  false; // default is false
             nElements   6;
             elementProfiles (cylinder);
@@ -121,10 +121,10 @@ turbine1
                 (-0.48 -0.82 0.11)
                 (-0.48  0.00 0.11)
             );
-        }
+        }}
 
         hub
-        {
+        {{
             nElements   1;
             elementProfiles (cylinder);
             elementData
@@ -132,50 +132,50 @@ turbine1
                 (0  0.13 0.13)
                 (0 -0.13 0.13)
             );
-        }
+        }}
 
         profileData
-        {
+        {{
             S826
-            {
+            {{
                 data (#include "S826_1e5_Ostavan");
-            }
+            }}
             cylinder
-            {
+            {{
                 data ((-180 0 1.1)(180 0 1.1));
-            }
-        }
-    }
-}
+            }}
+        }}
+    }}
+}}
 
 
 turbine2
-{
+{{
     type            axialFlowTurbineALSource;
-    active          on;
+    active          {turbine2_active};
     selectionMode   cellSet; // cellSet || points || cellZone
     cellSet         turbine2;
 
     axialFlowTurbineALSourceCoeffs
-    {
+    {{
         fieldNames          (U);
-        origin              (2.682 0 0);
+        origin              ({turbine2_x} 0 0); // 2.682
         axis                (-1 0 0);
         verticalDirection   (0 0 1);
         freeStreamVelocity  (10 0 0);
-        tipSpeedRatio       4.0;
+        tipSpeedRatio       {turbine2_tsr};
         rotorRadius         0.45;
 
         dynamicStall
-        {
+        {{
             active              off;
             dynamicStallModel   LeishmanBeddoes;
-        }
+        }}
 
         blades
-        {
+        {{
             blade1
-            {
+            {{
                 writePerf   true;
                 writeElementPerf true;
                 endEffects  on;
@@ -229,23 +229,23 @@ turbine2
                     (0.0 0.4275 0.0 0.0267804 0.25 1.097)
                     (0.0 0.4424985 0.0 0.02592585 0.25 -0.71674)
                 );
-            }
+            }}
             blade2
-            {
+            {{
                 $blade1;
                 writePerf   false;
                 writeElementPerf false;
                 azimuthalOffset 120.0;
-            }
+            }}
             blade3
-            {
+            {{
                 $blade2;
                 azimuthalOffset 240.0;
-            }
-        }
+            }}
+        }}
 
         tower
-        {
+        {{
             includeInTotalDrag  false; // default is false
             nElements   6;
             elementProfiles (cylinder);
@@ -256,10 +256,10 @@ turbine2
                 (-0.14 -0.42 0.06)
                 (-0.14  0.00 0.05)
             );
-        }
+        }}
 
         hub
-        {
+        {{
             nElements   1;
             elementProfiles (cylinder);
             elementData
@@ -267,20 +267,20 @@ turbine2
                 (0 0.09 0.09)
                 (0 -0.09 0.09)
             );
-        }
+        }}
 
         profileData
-        {
+        {{
             S826
-            {
+            {{
                 data (#include "S826_1e5_Ostavan");
-            }
+            }}
             cylinder
-            {
+            {{
                 data ((-180 0 1.1)(180 0 1.1));
-            }
-        }
-    }
-}
+            }}
+        }}
+    }}
+}}
 
 // ************************************************************************* //
