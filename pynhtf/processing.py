@@ -155,3 +155,28 @@ def load_perf(turbine="turbine1", angle0=4000.0, verbose=True):
         print("Mean C_P = {:.2f}".format(df.cp[df.angle_deg >= angle0].mean()))
         print("Mean C_D = {:.2f}".format(df.cd[df.angle_deg >= angle0].mean()))
     return df
+
+
+def calc_perf(t1=1.0):
+    """
+    Calculate the performance of both turbines. Return NaN if turbine is
+    not active.
+    """
+    df1 = pd.read_csv("postProcessing/turbines/0/turbine1.csv")
+    df2 = pd.read_csv("postProcessing/turbines/0/turbine2.csv")
+    df1 = df1.drop_duplicates("time", take_last=True)
+    df2 = df2.drop_duplicates("time", take_last=True)
+    df1 = df1[df1.time >= t1]
+    df2 = df2[df2.time >= t1]
+    return {"tsr_turbine1": df1.tsr.mean(),
+            "cp_turbine1": df1.cp.mean(),
+            "cd_turbine1": df1.cd.mean(),
+            "tsr_turbine2": df2.tsr.mean(),
+            "cp_turbine2": df2.cp.mean(),
+            "cd_turbine2": df2.cd.mean()}
+
+
+def load_exp_perf(turbine="turbine1", quantity="cp"):
+    """Load experimental performance data from Pierella et al. (2014)"""
+    fpath = "processed/Pierella2014/{}_{}.csv".format(turbine, quantity)
+    return pd.read_csv(fpath, skipinitialspace=True)

@@ -8,11 +8,13 @@ import matplotlib.pyplot as plt
 import pandas as pd
 from .processing import *
 
-ylabels = {"meanu" : r"$U/U_\infty$",
-           "stdu" : r"$\sigma_u/U_\infty$",
-           "meanv" : r"$V/U_\infty$",
-           "meanw" : r"$W/U_\infty$",
-           "meanuv" : r"$\overline{u'v'}/U_\infty^2$"}
+labels = {"meanu" : r"$U/U_\infty$",
+          "stdu" : r"$\sigma_u/U_\infty$",
+          "meanv" : r"$V/U_\infty$",
+          "meanw" : r"$W/U_\infty$",
+          "meanuv" : r"$\overline{u'v'}/U_\infty^2$",
+          "angle_deg": "Azimuthal angle (degrees)",
+          "time": "Time (s)"}
 
 
 def plot_al_perf(name="blade1"):
@@ -110,23 +112,66 @@ def plot_u_profile(turbine="turbine2", z_R=0.0, ax=None):
     df = load_u_profile(turbine=turbine, z_R=z_R)
     ax.plot(df.y_R, df.u/U, "-o")
     ax.set_xlabel("$y/R$")
-    ax.set_ylabel(ylabels["meanu"])
+    ax.set_ylabel(labels["meanu"])
     try:
         fig.tight_layout()
     except UnboundLocalError:
         pass
 
 
-def plot_cp(angle0=4000.0, turbine="both"):
+def plot_cp(angle0=4000.0, turbine="both", x="time", save=False):
     turbine = str(turbine)
     fig, ax = plt.subplots()
     if turbine == "both" or turbine == "turbine1":
         df1 = load_perf(turbine="turbine1", angle0=angle0)
-        ax.plot(df1.angle_deg, df1.cp, label="Turbine 1")
+        if not np.isnan(df1.cp.mean()):
+            ax.plot(df1[x], df1.cp, label="Turbine 1")
     if turbine == "both" or turbine == "turbine2":
         df2 = load_perf(turbine="turbine2", angle0=angle0)
-        ax.plot(df2.angle_deg, df2.cp, label="Turbine 2")
-    ax.set_xlabel("Azimuthal angle (degrees)")
+        if not np.isnan(df2.cp.mean()):
+            ax.plot(df2[x], df2.cp, label="Turbine 2")
+    ax.set_xlabel(labels[x])
     ax.set_ylabel("$C_P$")
     ax.legend(loc="upper right")
     fig.tight_layout()
+    if save:
+        fig.savefig("figures/cp-time-series.png", dpi=300)
+        fig.savefig("figures/cp-time-series.pdf")
+
+
+def plot_perf_curves(exp=False, save=False):
+    """Plot performance curves."""
+    df1 = pd.read_csv("processed/turbine1_tsr_sweep.csv")
+    df2 = pd.read_csv("processed/turbine2_tsr_sweep.csv")
+    if exp:
+        df_exp_turbine1_cp = load_exp_perf("turbine1", "cp")
+        df_exp_turbine1_cd = load_exp_perf("turbine1", "cd")
+        df_exp_turbine2_cp = load_exp_perf("turbine2", "cp")
+        df_exp_turbine2_cd = load_exp_perf("turbine2", "cd")
+    fig, ax = plt.subplots(figsize=(7.5, 3.5), nrows=1, ncols=2)
+    ax[0].plot(df1.tsr_turbine1, df1.cp_turbine1, "-o", label="ALM")
+    ax[0].plot(df2.tsr_turbine2, df2.cp_turbine2, "-o",
+               markerfacecolor="none")
+    ax[0].set_ylabel(r"$C_P$")
+    ax[1].plot(df1.tsr_turbine1, df1.cd_turbine1, "-o", label="ALM")
+    ax[1].plot(df2.tsr_turbine2, df2.cd_turbine2, "-o",
+               markerfacecolor="none")
+    ax[1].set_ylabel(r"$C_D$")
+    for a in ax:
+        a.set_xlabel(r"$\lambda$")
+    if exp:
+        ax[0].plot(df_exp_turbine1_cp.tsr, df_exp_turbine1_cp.cp, "^",
+                   label="Exp.")
+        ax[1].plot(df_exp_turbine1_cd.tsr, df_exp_turbine1_cd.cd, "^",
+                   label="Exp.")
+        ax[0].plot(df_exp_turbine2_cp.tsr, df_exp_turbine2_cp.cp, "^",
+                   markerfacecolor="none")
+        ax[1].plot(df_exp_turbine2_cd.tsr, df_exp_turbine2_cd.cd, "^",
+                   markerfacecolor="none")
+        ax[1].legend(loc="lower right")
+    ax[1].set_ylim((0, None))
+    fig.tight_layout()
+    if save:
+        figname = "perf-curves"
+        plt.savefig("figures/" + figname + ".pdf")
+        plt.savefig("figures/" + figname + ".png", dpi=300)

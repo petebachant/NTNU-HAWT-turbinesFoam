@@ -6,94 +6,95 @@
 |    \\/     M anipulation  |                                                 |
 \*---------------------------------------------------------------------------*/
 FoamFile
-{
+{{
     version     2.0;
     format      ascii;
     class       dictionary;
     object      topoSetDict;
-}
+}}
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
 actions
 (
-    {
+    {{
         name 	turbine1;
         type	cellSet;
         action	new;
         source	cylinderToCell;
         sourceInfo
-        {
+        {{
             type cylinder;
-            p1 (-0.25 0 0);
-            p2 (0.25 0 0);
+            p1 ({turbine1_upstream_x} 0 0); // turbine_x - 0.25
+            p2 ({turbine1_downstream_x} 0 0); // turbine_x + 0.25
             radius 0.6;
-        }
-    }
+        }}
+    }}
 
-    {
+    {{
         name 	turbine1;
         type	cellSet;
         action	add;
         source	cylinderToCell;
         sourceInfo
-        {
+        {{
             type cylinder;
-            p1 (0.48 0 -0.82); // 0.48 is a guess from Pierella et al drawing
-            p2 (0.48 0 0);
+            // 0.48 is a guess from Pierella et al drawing
+            p1 ({turbine1_tower_x} 0 -0.82);
+            p2 ({turbine1_tower_x} 0 0);
             radius 0.15;
-        }
-    }
+        }}
+    }}
 
-    {
+    {{
         name    turbine1;
         type    cellZoneSet;
         action  new;
         source  setToCellZone;
         sourceInfo
-        {
+        {{
             set turbine1;
-        }
-    }
+        }}
+    }}
 
-    {
+    {{
         name 	turbine2;
         type	cellSet;
         action	new;
         source	cylinderToCell;
         sourceInfo
-        {
+        {{
             type cylinder;
-            p1 (2.432 0 0);
-            p2 (2.932 0 0);
+            p1 ({turbine2_upstream_x} 0 0); // 2.432
+            p2 ({turbine2_downstream_x} 0 0); // 2.932
             radius 0.6;
-        }
-    }
+        }}
+    }}
 
-    {
+    {{
         name 	turbine2;
         type	cellSet;
         action	add;
         source	cylinderToCell;
         sourceInfo
-        {
+        {{
             type cylinder;
-            p1 (2.822 0 -0.82);
-            p2 (2.822 0 0);
+            p1 ({turbine2_tower_x} 0 -0.82); // 2.822
+            p2 ({turbine2_tower_x} 0 0); // 2.822
             radius 0.1;
-        }
-    }
+        }}
+    }}
 
-    {
+    {{
         name    turbine2;
         type    cellZoneSet;
         action  new;
         source  setToCellZone;
         sourceInfo
-        {
+        {{
             set turbine2;
-        }
-    }
+        }}
+    }}
 );
 
 // ************************************************************************* //
