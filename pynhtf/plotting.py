@@ -117,7 +117,7 @@ def plot_u_profile(turbine="turbine2", z_R=0.0, ax=None):
         pass
 
 
-def plot_cp(angle0=4000.0, turbine="both"):
+def plot_cp(angle0=4000.0, turbine="both", save=False):
     turbine = str(turbine)
     fig, ax = plt.subplots()
     if turbine == "both" or turbine == "turbine1":
@@ -132,3 +132,6 @@ def plot_cp(angle0=4000.0, turbine="both"):
     ax.set_ylabel("$C_P$")
     ax.legend(loc="upper right")
     fig.tight_layout()
+    if save:
+        fig.savefig("figures/perf-curves.png", dpi=300)
+        fig.savefig("figures/perf-curves.pdf")
