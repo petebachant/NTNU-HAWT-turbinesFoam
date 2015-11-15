@@ -135,3 +135,29 @@ def plot_cp(angle0=4000.0, turbine="both", save=False):
     if save:
         fig.savefig("figures/perf-curves.png", dpi=300)
         fig.savefig("figures/perf-curves.pdf")
+
+
+def plot_perf_curves(exp=False, save=False):
+    """Plot performance curves."""
+    df = pd.read_csv("processed/tsr_sweep.csv")
+    if exp:
+        df_exp = None
+    fig, ax = plt.subplots(figsize=(7.5, 3.5), nrows=1, ncols=2)
+    ax[0].plot(df.tsr_turbine1, df.cp_turbine1, "-o", label="ALM")
+    ax[0].set_ylabel(r"$C_P$")
+    ax[1].plot(df.tsr_turbine1, df.cd_turbine1, "-o", label="ALM")
+    ax[1].set_ylabel(r"$C_D$")
+    for a in ax:
+        a.set_xlabel(r"$\lambda$")
+    if exp:
+        ax[0].plot(df_exp.mean_tsr, df_exp.mean_cp, "^", label="Exp.",
+                   markerfacecolor="none")
+        ax[1].plot(df_exp.mean_tsr, df_exp.mean_cd, "^", label="Exp.",
+                   markerfacecolor="none")
+        ax[1].legend(loc="lower right")
+    ax[1].set_ylim((0, None))
+    fig.tight_layout()
+    if save:
+        figname = "perf-curves"
+        plt.savefig("figures/" + figname + ".pdf")
+        plt.savefig("figures/" + figname + ".png", dpi=300)
