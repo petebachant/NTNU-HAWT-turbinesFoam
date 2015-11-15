@@ -178,5 +178,5 @@ def calc_perf(t1=1.0):
 
 def load_exp_perf(turbine="turbine1", quantity="cp"):
     """Load experimental performance data from Pierella et al. (2014)"""
-    fpath = "processed/Pierella-2014/{}_{}.csv".format(turbine, quantity)
+    fpath = "processed/Pierella2014/{}_{}.csv".format(turbine, quantity)
     return pd.read_csv(fpath, skipinitialspace=True)
