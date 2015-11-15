@@ -133,8 +133,8 @@ def plot_cp(angle0=4000.0, turbine="both", save=False):
     ax.legend(loc="upper right")
     fig.tight_layout()
     if save:
-        fig.savefig("figures/perf-curves.png", dpi=300)
-        fig.savefig("figures/perf-curves.pdf")
+        fig.savefig("figures/cp-time-series.png", dpi=300)
+        fig.savefig("figures/cp-time-series.pdf")
 
 
 def plot_perf_curves(exp=False, save=False):
