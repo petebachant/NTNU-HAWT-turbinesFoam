@@ -139,18 +139,21 @@ def plot_cp(angle0=4000.0, turbine="both", save=False):
 
 def plot_perf_curves(exp=False, save=False):
     """Plot performance curves."""
-    df = pd.read_csv("processed/turbine1_tsr_sweep.csv")
+    df1 = pd.read_csv("processed/turbine1_tsr_sweep.csv")
+    df2 = pd.read_csv("processed/turbine2_tsr_sweep.csv")
     if exp:
         df_exp_turbine1_cp = load_exp_perf("turbine1", "cp")
         df_exp_turbine1_cd = load_exp_perf("turbine1", "cd")
         df_exp_turbine2_cp = load_exp_perf("turbine2", "cp")
         df_exp_turbine2_cd = load_exp_perf("turbine2", "cd")
     fig, ax = plt.subplots(figsize=(7.5, 3.5), nrows=1, ncols=2)
-    ax[0].plot(df.tsr_turbine1, df.cp_turbine1, "-o", label="ALM")
-    # ax[0].plot(df.tsr_turbine2, df.cp_turbine2, "--s", label="ALM")
+    ax[0].plot(df1.tsr_turbine1, df1.cp_turbine1, "-o", label="ALM")
+    ax[0].plot(df2.tsr_turbine2, df2.cp_turbine2, "-o",
+               markerfacecolor="none")
     ax[0].set_ylabel(r"$C_P$")
-    ax[1].plot(df.tsr_turbine1, df.cd_turbine1, "-o", label="ALM")
-    # ax[1].plot(df.tsr_turbine2, df.cd_turbine2, "--s", label="ALM")
+    ax[1].plot(df1.tsr_turbine1, df1.cd_turbine1, "-o", label="ALM")
+    ax[1].plot(df2.tsr_turbine2, df2.cd_turbine2, "-o",
+               markerfacecolor="none")
     ax[1].set_ylabel(r"$C_D$")
     for a in ax:
         a.set_xlabel(r"$\lambda$")
