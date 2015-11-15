@@ -141,7 +141,10 @@ def plot_perf_curves(exp=False, save=False):
     """Plot performance curves."""
     df = pd.read_csv("processed/turbine1_tsr_sweep.csv")
     if exp:
-        df_exp = None
+        df_exp_turbine1_cp = load_exp_perf("turbine1", "cp")
+        df_exp_turbine1_cd = load_exp_perf("turbine1", "cd")
+        df_exp_turbine2_cp = load_exp_perf("turbine2", "cp")
+        df_exp_turbine2_cd = load_exp_perf("turbine2", "cd")
     fig, ax = plt.subplots(figsize=(7.5, 3.5), nrows=1, ncols=2)
     ax[0].plot(df.tsr_turbine1, df.cp_turbine1, "-o", label="ALM")
     # ax[0].plot(df.tsr_turbine2, df.cp_turbine2, "--s", label="ALM")
@@ -152,9 +155,13 @@ def plot_perf_curves(exp=False, save=False):
     for a in ax:
         a.set_xlabel(r"$\lambda$")
     if exp:
-        ax[0].plot(df_exp.mean_tsr, df_exp.mean_cp, "^", label="Exp.",
+        ax[0].plot(df_exp_turbine1_cp.tsr, df_exp_turbine1_cp.cp, "^",
+                   label="Exp.")
+        ax[1].plot(df_exp_turbine1_cd.tsr, df_exp_turbine1_cd.cd, "^",
+                   label="Exp.")
+        ax[0].plot(df_exp_turbine2_cp.tsr, df_exp_turbine2_cp.cp, "^",
                    markerfacecolor="none")
-        ax[1].plot(df_exp.mean_tsr, df_exp.mean_cd, "^", label="Exp.",
+        ax[1].plot(df_exp_turbine2_cd.tsr, df_exp_turbine2_cd.cd, "^",
                    markerfacecolor="none")
         ax[1].legend(loc="lower right")
     ax[1].set_ylim((0, None))

@@ -174,3 +174,9 @@ def calc_perf(t1=1.0):
             "tsr_turbine2": df2.tsr.mean(),
             "cp_turbine2": df2.cp.mean(),
             "cd_turbine2": df2.cd.mean()}
+
+
+def load_exp_perf(turbine="turbine1", quantity="cp"):
+    """Load experimental performance data from Pierella et al. (2014)"""
+    fpath = "processed/Pierella-2014/{}_{}.csv".format(turbine, quantity)
+    return pd.read_csv(fpath, skipinitialspace=True)
