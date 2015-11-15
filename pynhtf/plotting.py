@@ -8,11 +8,13 @@ import matplotlib.pyplot as plt
 import pandas as pd
 from .processing import *
 
-ylabels = {"meanu" : r"$U/U_\infty$",
-           "stdu" : r"$\sigma_u/U_\infty$",
-           "meanv" : r"$V/U_\infty$",
-           "meanw" : r"$W/U_\infty$",
-           "meanuv" : r"$\overline{u'v'}/U_\infty^2$"}
+labels = {"meanu" : r"$U/U_\infty$",
+          "stdu" : r"$\sigma_u/U_\infty$",
+          "meanv" : r"$V/U_\infty$",
+          "meanw" : r"$W/U_\infty$",
+          "meanuv" : r"$\overline{u'v'}/U_\infty^2$",
+          "angle_deg": "Azimuthal angle (degrees)",
+          "time": "Time (s)"}
 
 
 def plot_al_perf(name="blade1"):
@@ -110,25 +112,25 @@ def plot_u_profile(turbine="turbine2", z_R=0.0, ax=None):
     df = load_u_profile(turbine=turbine, z_R=z_R)
     ax.plot(df.y_R, df.u/U, "-o")
     ax.set_xlabel("$y/R$")
-    ax.set_ylabel(ylabels["meanu"])
+    ax.set_ylabel(labels["meanu"])
     try:
         fig.tight_layout()
     except UnboundLocalError:
         pass
 
 
-def plot_cp(angle0=4000.0, turbine="both", save=False):
+def plot_cp(angle0=4000.0, turbine="both", x="time", save=False):
     turbine = str(turbine)
     fig, ax = plt.subplots()
     if turbine == "both" or turbine == "turbine1":
         df1 = load_perf(turbine="turbine1", angle0=angle0)
         if not np.isnan(df1.cp.mean()):
-            ax.plot(df1.angle_deg, df1.cp, label="Turbine 1")
+            ax.plot(df1[x], df1.cp, label="Turbine 1")
     if turbine == "both" or turbine == "turbine2":
         df2 = load_perf(turbine="turbine2", angle0=angle0)
         if not np.isnan(df2.cp.mean()):
-            ax.plot(df2.angle_deg, df2.cp, label="Turbine 2")
-    ax.set_xlabel("Azimuthal angle (degrees)")
+            ax.plot(df2[x], df2.cp, label="Turbine 2")
+    ax.set_xlabel(labels[x])
     ax.set_ylabel("$C_P$")
     ax.legend(loc="upper right")
     fig.tight_layout()
