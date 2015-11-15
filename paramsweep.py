@@ -39,10 +39,11 @@ def set_params(args):
 def single_turbine_tsr_sweep(start=1, stop=12, step=1, turbine="turbine1",
                              tsr_other_turbine=4, other_turbine_active="on",
                              append=False):
-    """Run over multiple TSRs. `stop` will be included."""
-    if not append and os.path.isfile("processed/tsr_sweep.csv"):
-        os.remove("processed/tsr_sweep.csv")
-    tsrs = np.arange(start, stop + 0.5*step, step)
+    """Run over multiple TSRs. `stop` will not be included."""
+    fpath = "processed/{}_tsr_sweep.csv".format(turbine)
+    if not append and os.path.isfile(fpath):
+        os.remove(fpath)
+    tsrs = np.arange(start, stop, step)
     if turbine == "turbine1":
         other_turbine = "turbine2"
     elif turbine == "turbine2":
@@ -72,4 +73,17 @@ def single_turbine_tsr_sweep(start=1, stop=12, step=1, turbine="turbine1",
 
 
 if __name__ == "__main__":
-    single_turbine_tsr_sweep(1, 12, 1, append=False)
+    import argparse
+    parser = argparse.ArgumentParser(description="Run mulitple simulations, "
+                                     "varying a single parameter.")
+    parser.add_argument("start", default=1, type=float)
+    parser.add_argument("stop", default=12, type=float)
+    parser.add_argument("step", default=1, type=float)
+    parser.add_argument("--turbine", "-t", default="turbine1")
+    parser.add_argument("--tsr-other-turbine", default=4, type=float)
+    parser.add_argument("--append", "-a", default=False, action="store_true")
+
+    args = parser.parse_args()
+    single_turbine_tsr_sweep(args.start, args.stop, args.step,
+                             turbine=args.turbine, append=args.append,
+                             tsr_other_turbine=args.tsr_other_turbine)
