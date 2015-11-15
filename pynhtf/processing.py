@@ -142,18 +142,18 @@ def load_upup_profile(turbine="turbine2", z_R=0.0):
     return df
 
 
-def load_perf(turbine="turbine1", angle0=4000.0, verbose=True):
+def load_perf(turbine="turbine1", t1=1.0, verbose=True):
     """Load turbine performance data."""
     df = pd.read_csv("postProcessing/turbines/0/{}.csv".format(turbine))
     df = df.drop_duplicates("time", take_last=True)
-    if df.angle_deg.max() < angle0:
-        angle0 = 0.0
+    if df.time.max() < t1:
+        t1 = 0.0
     if verbose:
-        print("{} performance from {:.1f}--{:.1f} degrees:".format(
-                turbine, angle0, df.angle_deg.max()))
-        print("Mean TSR = {:.2f}".format(df.tsr[df.angle_deg >= angle0].mean()))
-        print("Mean C_P = {:.2f}".format(df.cp[df.angle_deg >= angle0].mean()))
-        print("Mean C_D = {:.2f}".format(df.cd[df.angle_deg >= angle0].mean()))
+        print("{} performance from {:.1f}--{:.1f} seconds:".format(
+                turbine, t1, df.time.max()))
+        print("Mean TSR = {:.2f}".format(df.tsr[df.angle_deg >= t1].mean()))
+        print("Mean C_P = {:.2f}".format(df.cp[df.angle_deg >= t1].mean()))
+        print("Mean C_D = {:.2f}".format(df.cd[df.angle_deg >= t1].mean()))
     return df
 
 

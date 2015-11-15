@@ -119,15 +119,15 @@ def plot_u_profile(turbine="turbine2", z_R=0.0, ax=None):
         pass
 
 
-def plot_cp(angle0=4000.0, turbine="both", x="time", save=False):
+def plot_cp(t1=1.0, turbine="both", x="time", save=False):
     turbine = str(turbine)
     fig, ax = plt.subplots()
     if turbine == "both" or turbine == "turbine1":
-        df1 = load_perf(turbine="turbine1", angle0=angle0)
+        df1 = load_perf(turbine="turbine1", t1=t1)
         if not np.isnan(df1.cp.mean()):
             ax.plot(df1[x], df1.cp, label="Turbine 1")
     if turbine == "both" or turbine == "turbine2":
-        df2 = load_perf(turbine="turbine2", angle0=angle0)
+        df2 = load_perf(turbine="turbine2", t1=t1)
         if not np.isnan(df2.cp.mean()):
             ax.plot(df2[x], df2.cp, label="Turbine 2")
     ax.set_xlabel(labels[x])
