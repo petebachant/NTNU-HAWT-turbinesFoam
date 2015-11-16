@@ -151,9 +151,9 @@ def load_perf(turbine="turbine1", t1=1.0, verbose=True):
     if verbose:
         print("{} performance from {:.1f}--{:.1f} seconds:".format(
                 turbine, t1, df.time.max()))
-        print("Mean TSR = {:.2f}".format(df.tsr[df.angle_deg >= t1].mean()))
-        print("Mean C_P = {:.2f}".format(df.cp[df.angle_deg >= t1].mean()))
-        print("Mean C_D = {:.2f}".format(df.cd[df.angle_deg >= t1].mean()))
+        print("Mean TSR = {:.2f}".format(df.tsr[df.time >= t1].mean()))
+        print("Mean C_P = {:.2f}".format(df.cp[df.time >= t1].mean()))
+        print("Mean C_D = {:.2f}".format(df.cd[df.time >= t1].mean()))
     return df
 
 
