@@ -142,7 +142,7 @@ def load_upup_profile(turbine="turbine2", z_R=0.0):
     return df
 
 
-def load_perf(turbine="turbine1", t1=0.8, verbose=True):
+def load_perf(turbine="turbine1", t1=1.0, verbose=True):
     """Load turbine performance data."""
     df = pd.read_csv("postProcessing/turbines/0/{}.csv".format(turbine))
     df = df.drop_duplicates("time", take_last=True)
@@ -157,7 +157,7 @@ def load_perf(turbine="turbine1", t1=0.8, verbose=True):
     return df
 
 
-def calc_perf(t1=0.8):
+def calc_perf(t1=1.0):
     """
     Calculate the performance of both turbines. Return NaN if turbine is
     not active.
