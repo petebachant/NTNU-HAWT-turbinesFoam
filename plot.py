@@ -37,8 +37,7 @@ if __name__ == "__main__":
             os.mkdir("figures")
 
     if "wake" in args.plot or args.all:
-        plot_meancontquiv(save=args.save)
-        plot_kcont(save=args.save)
+        plot_profiles(save=args.save)
     if "perf" in args.plot or args.all:
         plot_cp(save=args.save)
     if "blade-perf" in args.plot or args.all:

@@ -190,3 +190,15 @@ def plot_perf_curves(exp=False, save=False):
         figname = "perf-curves"
         plt.savefig("figures/" + figname + ".pdf")
         plt.savefig("figures/" + figname + ".png", dpi=300)
+
+
+def plot_profiles(save=False):
+    """Plot mean and turbulence wake profiles."""
+    fig, (ax1, ax2) = plt.subplots(figsize=(7.5, 3.5), nrows=1, ncols=2)
+    plot_u_profile(ax=ax1, legend=True)
+    plot_upup_profile(ax=ax2, legend=False)
+    fig.tight_layout()
+    if save:
+        figname = "wake-profiles"
+        plt.savefig("figures/" + figname + ".pdf")
+        plt.savefig("figures/" + figname + ".png", dpi=300)
