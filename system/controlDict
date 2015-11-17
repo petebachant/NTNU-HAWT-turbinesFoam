@@ -22,7 +22,7 @@ startTime       0;
 
 stopAt          endTime;
 
-endTime         1.5;
+endTime         1.0;
 
 deltaT          0.001;
 
@@ -61,7 +61,7 @@ functions
         type            fieldAverage;
         functionObjectLibs ("libfieldFunctionObjects.so");
         enabled         true;
-        timeStart       1.0;
+        timeStart       0.8;
         outputControl   outputTime;
         resetOnRestart  true;
         resetOnOutput   false;
