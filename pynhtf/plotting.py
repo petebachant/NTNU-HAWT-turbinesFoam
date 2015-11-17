@@ -91,12 +91,20 @@ def plot_meancontquiv(turbine="turbine2"):
     plt.tight_layout()
 
 
-def plot_upup_profile(amount="total", turbine="turbine2", z_R=0.0, ax=None):
+def plot_upup_profile(amount="total", turbine="turbine2", z_R=0.0, ax=None,
+                      exp=True, legend=True):
     """Plot the streamwise velocity variance."""
     if ax is None:
         fig, ax = plt.subplots()
     df = load_upup_profile(turbine=turbine, z_R=z_R)
-    ax.plot(df.y_R, df["upup_" + amount]/U**2, "-o")
+    ax.plot(df.y_R, df["upup_" + amount]/U**2, "-o", label="ALM")
+    if exp:
+        df_exp = pd.read_csv("processed/Pierella2014/meanupup_xD1.csv",
+                             skipinitialspace=True)
+        ax.plot(df_exp.y_R, df_exp.meanupup_Uinfty2, "^",
+                markerfacecolor="none", label="Exp.")
+        if legend:
+            ax.legend(loc="best")
     ax.set_xlabel("$y/R$")
     ax.set_ylabel(r"$\overline{u^\prime u^\prime}/U_\infty^2$")
     try:
@@ -105,12 +113,19 @@ def plot_upup_profile(amount="total", turbine="turbine2", z_R=0.0, ax=None):
         pass
 
 
-def plot_u_profile(turbine="turbine2", z_R=0.0, ax=None):
+def plot_u_profile(turbine="turbine2", z_R=0.0, ax=None, exp=True, legend=True):
     """Plot mean streamwise velocity."""
     if ax is None:
         fig, ax = plt.subplots()
     df = load_u_profile(turbine=turbine, z_R=z_R)
-    ax.plot(df.y_R, df.u/U, "-o")
+    ax.plot(df.y_R, df.u/U, "-o", label="ALM")
+    if exp:
+        df_exp = pd.read_csv("processed/Pierella2014/meanu_xD1.csv",
+                             skipinitialspace=True)
+        ax.plot(df_exp.y_R, df_exp.meanu_Uinfty, "^",
+                markerfacecolor="none", label="Exp.")
+        if legend:
+            ax.legend(loc="best")
     ax.set_xlabel("$y/R$")
     ax.set_ylabel(labels["meanu"])
     try:
