@@ -12,8 +12,8 @@ import sys
 setformat = "csv"
 interpscheme = "cellPoint"
 fields = ["UMean", "UPrime2Mean", "kMean", "RMeanXX"]
-R = 0.45
-D = R*2
+D = {"turbine1": 0.944, "turbine2": 0.894}
+R = {turbine: d/2 for turbine, d in D.items()}
 x_D = 1.0
 y_R_max = 2.5
 y_R_min = -2.5
@@ -42,24 +42,23 @@ FoamFile
 
 
 def main():
-    zmin = z_R_min*R
-    zmax = z_R_max*R
-    z_array = np.linspace(zmin, zmax, nz)
-
-    ymax = y_R_max*R
-    ymin = y_R_min*R
-
     txt = header + "\n"
     txt += "setFormat " + setformat + "; \n\n"
     txt += "interpolationScheme " + interpscheme + "; \n\n"
     txt += "sets \n ( \n"
 
     for turbine in ["turbine1", "turbine2"]:
-        x = x_D*D
+        zmin = z_R_min*R[turbine]
+        zmax = z_R_max*R[turbine]
+        z_array = np.linspace(zmin, zmax, nz)
+        ymax = y_R_max*R[turbine]
+        ymin = y_R_min*R[turbine]
+        x = x_D*D[turbine]
+
         if turbine == "turbine2":
             x += x_turbine2
         for z in z_array:
-            txt += "    " + turbine + "_" + str(z/R) + "\n"
+            txt += "    " + turbine + "_" + str(z/R[turbine]) + "\n"
             txt += "    { \n"
             txt += "        type        uniform; \n"
             txt += "        axis        y; \n"
