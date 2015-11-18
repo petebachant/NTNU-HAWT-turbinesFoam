@@ -101,6 +101,7 @@ def plot_upup_profile(amount="total", turbine="turbine2", z_R=0.0, ax=None,
     if exp:
         df_exp = pd.read_csv("processed/Pierella2014/meanupup_xD1.csv",
                              skipinitialspace=True)
+        df_exp.y_R *= R["nominal"]/R[turbine]
         ax.plot(df_exp.y_R, df_exp.meanupup_Uinfty2, "^",
                 markerfacecolor="none", label="Exp.")
         if legend:
@@ -122,6 +123,7 @@ def plot_u_profile(turbine="turbine2", z_R=0.0, ax=None, exp=True, legend=True):
     if exp:
         df_exp = pd.read_csv("processed/Pierella2014/meanu_xD1.csv",
                              skipinitialspace=True)
+        df_exp.y_R *= R["nominal"]/R[turbine]
         ax.plot(df_exp.y_R, df_exp.meanu_Uinfty, "^",
                 markerfacecolor="none", label="Exp.")
         if legend:

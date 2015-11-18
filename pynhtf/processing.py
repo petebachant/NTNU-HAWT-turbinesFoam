@@ -14,12 +14,12 @@ from pxl import fdiff
 import pandas as pd
 
 # Some constants
-R = 0.45
+D = {"turbine1": 0.944, "turbine2": 0.894, "nominal": 0.9}
+R = {turbine: d/2 for turbine, d in D.items()}
+A = {turbine: np.pi*r**2 for turbine, r in R.items()}
 U = 10.0
 U_infty = U
-D = R*2
-A = np.pi*R**2
-rho = 1000.0
+rho = 1.2
 
 
 def load_u_profile(turbine="turbine2", z_R=0.0):
@@ -34,7 +34,7 @@ def load_u_profile(turbine="turbine2", z_R=0.0):
     data = pd.read_csv(os.path.join("postProcessing", "sets", latest_time,
                        fname))
     df = pd.DataFrame()
-    df["y_R"] = data["y"]/R
+    df["y_R"] = data["y"]/R[turbine]
     df["u"] = data["UMean_0"]
     return df
 
@@ -61,7 +61,7 @@ def load_vel_map(turbine="turbine2", component="u"):
         fname = "{}_{}_UMean.csv".format(turbine, zi)
         dfi = pd.read_csv(os.path.join(data_dir, fname))
         vel.append(dfi["UMean_{}".format(columns[component])].values)
-    y_R = dfi["y"]/R
+    y_R = dfi["y"]/R[turbine]
     z_R = np.asarray(z_R)
     vel = np.asarray(vel).reshape((len(z_R), len(y_R)))
     df = pd.DataFrame(vel, index=z_R, columns=y_R)
@@ -81,7 +81,7 @@ def load_k_profile(turbine="turbine2", z_R=0.0):
     fname_k = "{}_{}_kMean.csv".format(turbine, z_R)
     dfi = pd.read_csv(os.path.join("postProcessing", "sets", latest_time,
                       fname_u))
-    df["y_R"] = dfi.y/R
+    df["y_R"] = dfi.y/R[turbine]
     df["k_resolved"] = 0.5*(dfi.UPrime2Mean_0 + dfi.UPrime2Mean_3
                             + dfi.UPrime2Mean_5)
     try:
@@ -133,7 +133,7 @@ def load_upup_profile(turbine="turbine2", z_R=0.0):
     fname_k = "{}_{}_kMean_RMeanXX.csv".format(turbine, z_R)
     dfi = pd.read_csv(os.path.join("postProcessing", "sets", latest_time,
                       fname_u))
-    df["y_R"] = dfi.y/R
+    df["y_R"] = dfi.y/R[turbine]
     df["upup_resolved"] = dfi.UPrime2Mean_0
     dfi = pd.read_csv(os.path.join("postProcessing", "sets", latest_time,
                       fname_k))
@@ -179,4 +179,8 @@ def calc_perf(t1=1.0):
 def load_exp_perf(turbine="turbine1", quantity="cp"):
     """Load experimental performance data from Pierella et al. (2014)"""
     fpath = "processed/Pierella2014/{}_{}.csv".format(turbine, quantity)
-    return pd.read_csv(fpath, skipinitialspace=True)
+    df = pd.read_csv(fpath, skipinitialspace=True)
+    # Correct for the fact experimental results use nominal dimensions
+    df.tsr *= R[turbine]/R["nominal"]
+    df[quantity] *= A["nominal"]/A[turbine]
+    return df
