@@ -1,7 +1,7 @@
 /*--------------------------------*- C++ -*----------------------------------*\
 | =========                 |                                                 |
 | \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
-|  \\    /   O peration     | Version:  2.4.x                                 |
+|  \\    /   O peration     | Version:  3.0.x                                 |
 |   \\  /    A nd           | Web:      www.OpenFOAM.org                      |
 |    \\/     M anipulation  |                                                 |
 \*---------------------------------------------------------------------------*/
@@ -20,12 +20,12 @@ turbine1
 {{
     type            axialFlowTurbineALSource;
     active          {turbine1_active};
-    selectionMode   cellSet; // cellSet || points || cellZone
-    cellSet         turbine1;
 
     axialFlowTurbineALSourceCoeffs
     {{
         fieldNames          (U);
+        selectionMode       cellSet; // cellSet || points || cellZone
+        cellSet             turbine1;
         origin              ({turbine1_x} 0 0);
         axis                (-1 0 0);
         verticalDirection   (0 0 1);
@@ -153,12 +153,12 @@ turbine2
 {{
     type            axialFlowTurbineALSource;
     active          {turbine2_active};
-    selectionMode   cellSet; // cellSet || points || cellZone
-    cellSet         turbine2;
 
     axialFlowTurbineALSourceCoeffs
     {{
         fieldNames          (U);
+        selectionMode       cellSet; // cellSet || points || cellZone
+        cellSet             turbine2;
         origin              ({turbine2_x} 0 0); // 2.682
         axis                (-1 0 0);
         verticalDirection   (0 0 1);
