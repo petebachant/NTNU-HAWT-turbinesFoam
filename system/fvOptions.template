@@ -273,7 +273,7 @@ turbine2
         {{
             S826
             {{
-                data (#include "S826_1e5_Ostavan");
+                data (#include "S826_8e4_Chivaee");
             }}
             cylinder
             {{
