@@ -145,7 +145,7 @@ def load_upup_profile(turbine="turbine2", z_R=0.0):
 def load_perf(turbine="turbine1", t1=1.0, verbose=True):
     """Load turbine performance data."""
     df = pd.read_csv("postProcessing/turbines/0/{}.csv".format(turbine))
-    df = df.drop_duplicates("time", take_last=True)
+    df = df.drop_duplicates("time", keep="last")
     if df.time.max() < t1:
         t1 = 0.0
     if verbose:
@@ -164,8 +164,8 @@ def calc_perf(t1=1.0):
     """
     df1 = pd.read_csv("postProcessing/turbines/0/turbine1.csv")
     df2 = pd.read_csv("postProcessing/turbines/0/turbine2.csv")
-    df1 = df1.drop_duplicates("time", take_last=True)
-    df2 = df2.drop_duplicates("time", take_last=True)
+    df1 = df1.drop_duplicates("time", keep="last")
+    df2 = df2.drop_duplicates("time", keep="last")
     df1 = df1[df1.time >= t1]
     df2 = df2[df2.time >= t1]
     return {"tsr_turbine1": df1.tsr.mean(),
