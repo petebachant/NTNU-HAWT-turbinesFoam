@@ -168,11 +168,11 @@ def plot_perf_curves(exp=False, save=False):
     fig, ax = plt.subplots(figsize=(7.5, 3.5), nrows=1, ncols=2)
     ax[0].plot(df1.tsr_turbine1, df1.cp_turbine1, "-o", label="ALM")
     ax[0].plot(df2.tsr_turbine2, df2.cp_turbine2, "-o",
-               markerfacecolor="none")
+               markerfacecolor="none", label="")
     ax[0].set_ylabel(r"$C_P$")
     ax[1].plot(df1.tsr_turbine1, df1.cd_turbine1, "-o", label="ALM")
     ax[1].plot(df2.tsr_turbine2, df2.cd_turbine2, "-o",
-               markerfacecolor="none")
+               markerfacecolor="none", label="")
     ax[1].set_ylabel(r"$C_D$")
     for a in ax:
         a.set_xlabel(r"$\lambda$")
@@ -182,9 +182,9 @@ def plot_perf_curves(exp=False, save=False):
         ax[1].plot(df_exp_turbine1_cd.tsr, df_exp_turbine1_cd.cd, "^",
                    label="Exp.")
         ax[0].plot(df_exp_turbine2_cp.tsr, df_exp_turbine2_cp.cp, "^",
-                   markerfacecolor="none")
+                   markerfacecolor="none", label="")
         ax[1].plot(df_exp_turbine2_cd.tsr, df_exp_turbine2_cd.cd, "^",
-                   markerfacecolor="none")
+                   markerfacecolor="none", label="")
         ax[1].legend(loc="lower right")
     ax[1].set_ylim((0, None))
     fig.tight_layout()
