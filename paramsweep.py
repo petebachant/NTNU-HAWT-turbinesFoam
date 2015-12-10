@@ -36,9 +36,17 @@ def set_params(args):
     call(cmd, shell=True)
 
 
+def run_solver(parallel=True):
+    """Run `pimpleFoam`."""
+    if parallel:
+        call("mpirun -np 2 pimpleFoam -parallel > log.pimpleFoam", shell=True)
+    else:
+        call("pimpleFoam > log.pimpleFoam", shell=True)
+
+
 def single_turbine_tsr_sweep(start=1, stop=12, step=1, turbine="turbine1",
                              tsr_other_turbine=4, other_turbine_active="on",
-                             append=False):
+                             parallel=True, append=False):
     """Run over multiple TSRs. `stop` will not be included."""
     fpath = "processed/{}_tsr_sweep.csv".format(turbine)
     if not append and os.path.isfile(fpath):
@@ -63,11 +71,17 @@ def single_turbine_tsr_sweep(start=1, stop=12, step=1, turbine="turbine1",
             print("Running topoSet")
             call("topoSet > log.topoSet", shell=True)
             shutil.copytree("0.org", "0")
+            if parallel:
+                print("Running decomposePar")
+                call("decomposePar > log.decomposePar", shell=True)
+                call("ls -d processor* | xargs -I {} rm -rf ./{}/0", shell=True)
+                call("ls -d processor* | xargs -I {} cp -r 0.org ./{}/0",
+                     shell=True)
             print("Running pimpleFoam")
-            call("pimpleFoam > log.pimpleFoam", shell=True)
+            run_solver(parallel=parallel)
         else:
             print("Running pimpleFoam")
-            call("pimpleFoam > log.pimpleFoam", shell=True)
+            run_solver(parallel=parallel)
         os.rename("log.pimpleFoam", "log.pimpleFoam." + str(tsr))
         log_perf(param=turbine + "_tsr", append=True)
 
@@ -81,9 +95,11 @@ if __name__ == "__main__":
     parser.add_argument("step", default=1, type=float)
     parser.add_argument("--turbine", "-t", default="turbine1")
     parser.add_argument("--tsr-other-turbine", default=4, type=float)
+    parser.add_argument("--parallel", default=True, type=bool)
     parser.add_argument("--append", "-a", default=False, action="store_true")
 
     args = parser.parse_args()
     single_turbine_tsr_sweep(args.start, args.stop, args.step,
                              turbine=args.turbine, append=args.append,
-                             tsr_other_turbine=args.tsr_other_turbine)
+                             tsr_other_turbine=args.tsr_other_turbine,
+                             parallel=args.parallel)

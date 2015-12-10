@@ -19,9 +19,9 @@ labels = {"meanu" : r"$U/U_\infty$",
 
 def plot_al_perf(name="blade1"):
     df_turb = pd.read_csv("postProcessing/turbines/0/turbine.csv")
-    df_turb = df_turb.drop_duplicates("time", take_last=True)
+    df_turb = df_turb.drop_duplicates("time", keep="last")
     df = pd.read_csv("postProcessing/actuatorLines/0/{}.csv".format(name))
-    df = df.drop_duplicates("time", take_last=True)
+    df = df.drop_duplicates("time", keep="last")
     df["angle_deg"] = df_turb.angle_deg
     plt.figure()
     plt.plot(df.angle_deg, df.alpha_deg)
@@ -91,12 +91,21 @@ def plot_meancontquiv(turbine="turbine2"):
     plt.tight_layout()
 
 
-def plot_upup_profile(amount="total", turbine="turbine2", z_R=0.0, ax=None):
+def plot_upup_profile(amount="total", turbine="turbine2", z_R=0.0, ax=None,
+                      exp=True, legend=True):
     """Plot the streamwise velocity variance."""
     if ax is None:
         fig, ax = plt.subplots()
     df = load_upup_profile(turbine=turbine, z_R=z_R)
-    ax.plot(df.y_R, df["upup_" + amount]/U**2, "-o")
+    ax.plot(df.y_R, df["upup_" + amount]/U**2, "-o", label="ALM")
+    if exp:
+        df_exp = pd.read_csv("processed/Pierella2014/meanupup_xD1.csv",
+                             skipinitialspace=True)
+        df_exp.y_R *= R["nominal"]/R[turbine]
+        ax.plot(df_exp.y_R, df_exp.meanupup_Uinfty2, "^",
+                markerfacecolor="none", label="Exp.")
+        if legend:
+            ax.legend(loc="best")
     ax.set_xlabel("$y/R$")
     ax.set_ylabel(r"$\overline{u^\prime u^\prime}/U_\infty^2$")
     try:
@@ -105,12 +114,20 @@ def plot_upup_profile(amount="total", turbine="turbine2", z_R=0.0, ax=None):
         pass
 
 
-def plot_u_profile(turbine="turbine2", z_R=0.0, ax=None):
+def plot_u_profile(turbine="turbine2", z_R=0.0, ax=None, exp=True, legend=True):
     """Plot mean streamwise velocity."""
     if ax is None:
         fig, ax = plt.subplots()
     df = load_u_profile(turbine=turbine, z_R=z_R)
-    ax.plot(df.y_R, df.u/U, "-o")
+    ax.plot(df.y_R, df.u/U, "-o", label="ALM")
+    if exp:
+        df_exp = pd.read_csv("processed/Pierella2014/meanu_xD1.csv",
+                             skipinitialspace=True)
+        df_exp.y_R *= R["nominal"]/R[turbine]
+        ax.plot(df_exp.y_R, df_exp.meanu_Uinfty, "^",
+                markerfacecolor="none", label="Exp.")
+        if legend:
+            ax.legend(loc="best")
     ax.set_xlabel("$y/R$")
     ax.set_ylabel(labels["meanu"])
     try:
@@ -119,15 +136,15 @@ def plot_u_profile(turbine="turbine2", z_R=0.0, ax=None):
         pass
 
 
-def plot_cp(t1=1.0, turbine="both", x="time", save=False):
+def plot_cp(turbine="both", x="time", save=False):
     turbine = str(turbine)
     fig, ax = plt.subplots()
     if turbine == "both" or turbine == "turbine1":
-        df1 = load_perf(turbine="turbine1", t1=t1)
+        df1 = load_perf(turbine="turbine1")
         if not np.isnan(df1.cp.mean()):
             ax.plot(df1[x], df1.cp, label="Turbine 1")
     if turbine == "both" or turbine == "turbine2":
-        df2 = load_perf(turbine="turbine2", t1=t1)
+        df2 = load_perf(turbine="turbine2")
         if not np.isnan(df2.cp.mean()):
             ax.plot(df2[x], df2.cp, label="Turbine 2")
     ax.set_xlabel(labels[x])
@@ -151,11 +168,11 @@ def plot_perf_curves(exp=False, save=False):
     fig, ax = plt.subplots(figsize=(7.5, 3.5), nrows=1, ncols=2)
     ax[0].plot(df1.tsr_turbine1, df1.cp_turbine1, "-o", label="ALM")
     ax[0].plot(df2.tsr_turbine2, df2.cp_turbine2, "-o",
-               markerfacecolor="none")
+               markerfacecolor="none", label="")
     ax[0].set_ylabel(r"$C_P$")
     ax[1].plot(df1.tsr_turbine1, df1.cd_turbine1, "-o", label="ALM")
     ax[1].plot(df2.tsr_turbine2, df2.cd_turbine2, "-o",
-               markerfacecolor="none")
+               markerfacecolor="none", label="")
     ax[1].set_ylabel(r"$C_D$")
     for a in ax:
         a.set_xlabel(r"$\lambda$")
@@ -165,13 +182,25 @@ def plot_perf_curves(exp=False, save=False):
         ax[1].plot(df_exp_turbine1_cd.tsr, df_exp_turbine1_cd.cd, "^",
                    label="Exp.")
         ax[0].plot(df_exp_turbine2_cp.tsr, df_exp_turbine2_cp.cp, "^",
-                   markerfacecolor="none")
+                   markerfacecolor="none", label="")
         ax[1].plot(df_exp_turbine2_cd.tsr, df_exp_turbine2_cd.cd, "^",
-                   markerfacecolor="none")
+                   markerfacecolor="none", label="")
         ax[1].legend(loc="lower right")
     ax[1].set_ylim((0, None))
     fig.tight_layout()
     if save:
         figname = "perf-curves"
+        plt.savefig("figures/" + figname + ".pdf")
+        plt.savefig("figures/" + figname + ".png", dpi=300)
+
+
+def plot_profiles(save=False):
+    """Plot mean and turbulence wake profiles."""
+    fig, (ax1, ax2) = plt.subplots(figsize=(7.5, 3.5), nrows=1, ncols=2)
+    plot_u_profile(ax=ax1, legend=True)
+    plot_upup_profile(ax=ax2, legend=False)
+    fig.tight_layout()
+    if save:
+        figname = "wake-profiles"
         plt.savefig("figures/" + figname + ".pdf")
         plt.savefig("figures/" + figname + ".png", dpi=300)
