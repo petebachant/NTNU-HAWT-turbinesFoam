@@ -24,7 +24,7 @@ functions
     {
         functionObjectLibs ("libfieldFunctionObjects.so");
         type            readFields;
-        fields          (pMean UMean kMean nutMean);
+        fields          (pMean UMean kMean nutMean BMean);
     }
 
     postProcessFields
@@ -96,7 +96,7 @@ functions
                     IOobject::NO_READ,
                     IOobject::AUTO_WRITE
                 ),
-                B.component(tensor::XX)
+                BMean.component(tensor::XX)
             );
 
             gradPMeanX.write();
