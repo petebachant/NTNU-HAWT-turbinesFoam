@@ -22,6 +22,7 @@ if [ "$1" = "-parallel" ]
     ls -d processor* | xargs -I {} cp -r 0.org ./{}/0
     runParallel pimpleFoam  $nProc
     runApplication reconstructPar
+    rm -rf processor*
 else
     runApplication pimpleFoam
 fi
