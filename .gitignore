@@ -8,8 +8,7 @@ processor*
 !0.org
 constant/extendedFeatureEdgeMesh
 *.eMesh
-constant/polyMesh/*
-!constant/polyMesh/blockMeshDict
+constant/polyMesh
 constant/cellToRegion
 *.OpenFOAM
 *.pyc
