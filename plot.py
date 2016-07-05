@@ -11,10 +11,8 @@ import argparse
 
 
 if __name__ == "__main__":
-    import seaborn as sns
-    sns.set(context="paper", style="white", font_scale=1.5,
-            rc={"axes.grid": True, "legend.frameon": True,
-                "lines.markeredgewidth": 1})
+    import seaborn
+    seaborn.set(color_codes=True)
 
     parser = argparse.ArgumentParser(description="Generate plots.")
     parser.add_argument("plot", nargs="*", help="What to plot", default="perf",
