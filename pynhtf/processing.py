@@ -135,12 +135,11 @@ def load_upup_profile(turbine="turbine2", z_R=0.0):
     return df
 
 
-def load_perf(turbine="turbine1", t1=1.0, verbose=True):
+def load_perf(turbine="turbine1", verbose=True):
     """Load turbine performance data."""
     df = pd.read_csv("postProcessing/turbines/0/{}.csv".format(turbine))
     df = df.drop_duplicates("time", keep="last")
-    if df.time.max() < t1:
-        t1 = 0.0
+    t1 = df.time.iloc[len(df.time)//2]
     if verbose:
         print("{} performance from {:.1f}--{:.1f} seconds:".format(
                 turbine, t1, df.time.max()))
