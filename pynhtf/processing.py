@@ -1,7 +1,5 @@
 #!/usr/bin/env python
-"""
-Processing functions.
-"""
+"""Processing functions."""
 
 from __future__ import division, print_function
 import matplotlib.pyplot as plt
@@ -23,8 +21,7 @@ rho = 1.2
 
 
 def load_u_profile(turbine="turbine2", z_R=0.0):
-    """
-    Loads data from the sampled mean velocity and returns it as a pandas
+    """Load data from the sampled mean velocity and return it as a pandas
     `DataFrame`.
     """
     z_R = float(z_R)
@@ -40,8 +37,7 @@ def load_u_profile(turbine="turbine2", z_R=0.0):
 
 
 def load_vel_map(turbine="turbine2", component="u"):
-    """
-    Loads all mean streamwise velocity profiles. Returns a `DataFrame` with
+    """Load all mean streamwise velocity profiles. Returns a `DataFrame` with
     `z_R` as the index and `y_R` as columns.
     """
     # Define columns in set raw data file
@@ -69,9 +65,8 @@ def load_vel_map(turbine="turbine2", component="u"):
 
 
 def load_k_profile(turbine="turbine2", z_R=0.0):
-    """
-    Loads data from the sampled `UPrime2Mean` and `kMean` (if available) and
-    returns it as a pandas `DataFrame`.
+    """Load data from the sampled `UPrime2Mean` and `kMean` (if available) and
+    return it as a pandas `DataFrame`.
     """
     z_R = float(z_R)
     df = pd.DataFrame()
@@ -96,8 +91,7 @@ def load_k_profile(turbine="turbine2", z_R=0.0):
 
 
 def load_k_map(amount="total"):
-    """
-    Loads all TKE profiles. Returns a `DataFrame` with `z_H` as the index and
+    """Load all TKE profiles. Returns a `DataFrame` with `z_H` as the index and
     `y_R` as columns.
     """
     sets_dir = os.path.join("postProcessing", "sets")
@@ -121,9 +115,8 @@ def load_k_map(amount="total"):
 
 
 def load_upup_profile(turbine="turbine2", z_R=0.0):
-    """
-    Loads data from the sampled `UPrime2Mean` and `RMeanXX` and
-    returns it as a pandas `DataFrame`.
+    """Load data from the sampled `UPrime2Mean` and `RMeanXX` and
+    return it as a pandas `DataFrame`.
     """
     z_R = float(z_R)
     df = pd.DataFrame()
@@ -158,8 +151,7 @@ def load_perf(turbine="turbine1", t1=1.0, verbose=True):
 
 
 def calc_perf(t1=1.0):
-    """
-    Calculate the performance of both turbines. Return NaN if turbine is
+    """Calculate the performance of both turbines. Return NaN if turbine is
     not active.
     """
     df1 = pd.read_csv("postProcessing/turbines/0/turbine1.csv")

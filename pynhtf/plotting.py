@@ -1,7 +1,5 @@
 #!/usr/bin/env python
-"""
-Plotting functions.
-"""
+"""Plotting functions."""
 
 from __future__ import division, print_function
 import matplotlib.pyplot as plt
@@ -17,7 +15,7 @@ labels = {"meanu" : r"$U/U_\infty$",
           "time": "Time (s)"}
 
 
-def plot_al_perf(name="blade1"):
+def plot_al_perf(name="blade1", save=False):
     df_turb = pd.read_csv("postProcessing/turbines/0/turbine.csv")
     df_turb = df_turb.drop_duplicates("time", keep="last")
     df = pd.read_csv("postProcessing/actuatorLines/0/{}.csv".format(name))
@@ -33,13 +31,15 @@ def plot_al_perf(name="blade1"):
     plt.xlabel("Azimuthal angle (degrees)")
     plt.ylabel("Relative velocity (m/s)")
     plt.tight_layout()
+    if save:
+        plt.savefig("figures/" + name + "-perf.pdf")
 
 
-def plot_blade_perf():
-    plot_al_perf("blade1")
+def plot_blade_perf(save=False):
+    plot_al_perf("blade1", save=save)
 
 
-def plot_spanwise():
+def plot_spanwise(save=False):
     elements_dir = "postProcessing/actuatorLineElements/0"
     elements = os.listdir(elements_dir)
     dfs = {}
@@ -60,6 +60,8 @@ def plot_spanwise():
     for a in ax:
         a.set_xlabel("$r/R$")
     fig.tight_layout()
+    if save:
+        plt.savefig("figures/spanwise.pdf")
 
 
 def plot_meancontquiv(turbine="turbine2"):
