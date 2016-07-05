@@ -52,5 +52,5 @@ if __name__ == "__main__":
     if "recovery" in args.plot or args.all:
         make_recovery_bar_chart(save=args.save)
 
-    if not args.noshow:
+    if not args.no_show:
         plt.show()
