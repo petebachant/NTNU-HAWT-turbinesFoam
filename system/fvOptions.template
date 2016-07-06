@@ -35,8 +35,26 @@ turbine1
 
         dynamicStall
         {{
-            active              off;
-            dynamicStallModel   LeishmanBeddoes;
+            active          off;
+            dynamicStallModel LeishmanBeddoes;
+        }}
+
+        endEffects
+        {{
+            active          on;
+            endEffectsModel liftingLine;
+            GlauertCoeffs
+            {{
+                tipEffects  on;
+                rootEffects on;
+            }}
+            ShenCoeffs
+            {{
+                tipEffects  on;
+                rootEffects on;
+                c1          0.125;
+                c2          21;
+            }}
         }}
 
         blades
@@ -45,7 +63,6 @@ turbine1
             {{
                 writePerf   true;
                 writeElementPerf true;
-                endEffects  on;
                 nElements   28;
                 elementProfiles
                 (
@@ -168,8 +185,12 @@ turbine2
 
         dynamicStall
         {{
-            active              off;
-            dynamicStallModel   LeishmanBeddoes;
+            $....turbine1.axialFlowTurbineALSourceCoeffs.dynamicStall
+        }}
+
+        endEffects
+        {{
+            $....turbine1.axialFlowTurbineALSourceCoeffs.endEffects
         }}
 
         blades
@@ -178,7 +199,6 @@ turbine2
             {{
                 writePerf   true;
                 writeElementPerf true;
-                endEffects  on;
                 nElements   28;
                 elementProfiles
                 (
