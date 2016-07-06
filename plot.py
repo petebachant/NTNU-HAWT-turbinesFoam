@@ -18,7 +18,7 @@ if __name__ == "__main__":
     parser.add_argument("plot", nargs="*", help="What to plot", default="perf",
                         choices=["perf", "wake", "spanwise", "blade-perf",
                                  "strut-perf", "perf-curves", "perf-curves-exp",
-                                 "recovery"])
+                                 "recovery", "meancontquiv"])
     parser.add_argument("--all", "-A", help="Generate all figures",
                         default=False, action="store_true")
     parser.add_argument("--save", "-s", help="Save to `figures` directory",
@@ -49,6 +49,8 @@ if __name__ == "__main__":
         plot_perf_curves(exp=True, save=args.save)
     if "recovery" in args.plot or args.all:
         make_recovery_bar_chart(save=args.save)
+    if "meancontquiv" in args.plot:
+        plot_meancontquiv(save=args.save)
 
     if not args.no_show:
         plt.show()

@@ -64,7 +64,7 @@ def plot_spanwise(save=False):
         plt.savefig("figures/spanwise.pdf")
 
 
-def plot_meancontquiv(turbine="turbine2"):
+def plot_meancontquiv(turbine="turbine2", save=False):
     mean_u = load_vel_map(turbine=turbine, component="u")
     mean_v = load_vel_map(turbine=turbine, component="v")
     mean_w = load_vel_map(turbine=turbine, component="w")
@@ -91,6 +91,8 @@ def plot_meancontquiv(turbine="turbine2"):
                       linewidth=3.0)
     ax.add_patch(circ)
     plt.tight_layout()
+    if save:
+        plt.savefig("figures/" + turbine + "-meancontquiv.pdf")
 
 
 def plot_upup_profile(amount="total", turbine="turbine2", z_R=0.0, ax=None,
