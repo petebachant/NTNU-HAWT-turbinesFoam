@@ -48,7 +48,7 @@ def load_vel_map(turbine="turbine2", component="u"):
     flist = os.listdir(data_dir)
     z_R = []
     for fname in flist:
-        if "UMean" in fname:
+        if "UMean" in fname and turbine in fname:
             z_R.append(float(fname.split("_")[1]))
     z_R.sort()
     z_R.reverse()

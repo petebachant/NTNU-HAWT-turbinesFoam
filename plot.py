@@ -27,6 +27,9 @@ if __name__ == "__main__":
                         help="Do not call matplotlib show function")
     parser.add_argument("-q", help="Quantities to plot", nargs="*",
                         default=["alpha", "rel_vel_mag"])
+    parser.add_argument("--turbine", "-T", help="Turbine behind which to plot "
+                        "velocity map", choices=["turbine1", "turbine2"],
+                        default="turbine1")
     args = parser.parse_args()
 
     if args.save:
@@ -50,7 +53,7 @@ if __name__ == "__main__":
     if "recovery" in args.plot or args.all:
         make_recovery_bar_chart(save=args.save)
     if "meancontquiv" in args.plot:
-        plot_meancontquiv(save=args.save)
+        plot_meancontquiv(turbine=args.turbine, save=args.save)
 
     if not args.no_show:
         plt.show()
