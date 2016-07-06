@@ -1,7 +1,7 @@
 /*--------------------------------*- C++ -*----------------------------------*\
 | =========                 |                                                 |
 | \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
-|  \\    /   O peration     | Version:  2.4.x                                 |
+|  \\    /   O peration     | Version:  3.0.x                                 |
 |   \\  /    A nd           | Web:      www.OpenFOAM.org                      |
 |    \\/     M anipulation  |                                                 |
 \*---------------------------------------------------------------------------*/
@@ -93,6 +93,31 @@ actions
         sourceInfo
         {{
             set turbine2;
+        }}
+    }}
+
+    {{
+        name 	vg1;
+        type	cellSet;
+        action	new;
+        source	cylinderToCell;
+        sourceInfo
+        {{
+            type cylinder;
+            p1 (0.1 0 -0.1); // 2.822
+            p2 (0.1 0 0.65); // 2.822
+            radius 0.2;
+        }}
+    }}
+
+    {{
+        name    vg1;
+        type    cellZoneSet;
+        action  new;
+        source  setToCellZone;
+        sourceInfo
+        {{
+            set vg1;
         }}
     }}
 );
