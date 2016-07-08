@@ -322,8 +322,8 @@ vg1
 
         elementGeometry // Will be interpolated linearly per nElements
         ( // point spanDir chordLength chordRefDir chordMount pitch
-            ((0.1 0.0 0.0) (0 0 1) (0.10) (-1 0 0) (0.25) (6))
-            ((0.1 0.0 0.45) (0 0 1) (0.10) (-1 0 0) (0.25) (6))
+            ((0.1 -0.2 0.0) (0 0 1) (0.10) (-1 0 0) (0.25) (-6))
+            ((0.1 -0.2 0.45) (0 0 1) (0.10) (-1 0 0) (0.25) (-6))
         );
 
         elementProfiles (profile0); // Will be distributed evenly
@@ -360,6 +360,21 @@ vg1
             }}
         }}
     }}
+}}
+
+vg2
+{{
+    $vg1;
+
+    actuatorLineSourceCoeffs
+    {{
+        cellSet             vg2;       // cellSet name
+
+        elementGeometry // Will be interpolated linearly per nElements
+        ( // point spanDir chordLength chordRefDir chordMount pitch
+            ((0.1 0.2 0.0) (0 0 1) (0.10) (-1 0 0) (0.25) (6))
+            ((0.1 0.2 0.45) (0 0 1) (0.10) (-1 0 0) (0.25) (6))
+        );
 }}
 
 

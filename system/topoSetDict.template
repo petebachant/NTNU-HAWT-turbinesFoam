@@ -104,8 +104,8 @@ actions
         sourceInfo
         {{
             type cylinder;
-            p1 (0.1 0 -0.1); // 2.822
-            p2 (0.1 0 0.65); // 2.822
+            p1 (0.1 -0.2 -0.1); // 2.822
+            p2 (0.1 -0.2 0.65); // 2.822
             radius 0.2;
         }}
     }}
@@ -118,6 +118,31 @@ actions
         sourceInfo
         {{
             set vg1;
+        }}
+    }}
+
+    {{
+        name 	vg2;
+        type	cellSet;
+        action	new;
+        source	cylinderToCell;
+        sourceInfo
+        {{
+            type cylinder;
+            p1 (0.1 0.2 -0.1); // 2.822
+            p2 (0.1 0.2 0.65); // 2.822
+            radius 0.2;
+        }}
+    }}
+
+    {{
+        name    vg2;
+        type    cellZoneSet;
+        action  new;
+        source  setToCellZone;
+        sourceInfo
+        {{
+            set vg2;
         }}
     }}
 );
