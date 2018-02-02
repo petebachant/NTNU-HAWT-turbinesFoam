@@ -40,9 +40,9 @@ if __name__ == "__main__":
     if "spanwise" in args.plot or args.all:
         plot_spanwise(save=args.save)
     if "blade-perf" in args.plot or args.all:
-        plot_blade_perf(save=args.save, quantities=args.q)
+        plot_blade_perf(save=args.save)
     if "strut-perf" in args.plot or args.all:
-        plot_strut_perf(save=args.save, quantities=args.q)
+        plot_strut_perf(save=args.save)
     if "perf-curves" in args.plot or args.all:
         plot_perf_curves(exp=False, save=args.save)
     if "perf-curves-exp" in args.plot or args.all:
