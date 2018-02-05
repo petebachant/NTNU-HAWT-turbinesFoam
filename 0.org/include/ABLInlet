@@ -1,0 +1,21 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  5.x                                   |
+|   \\  /    A nd           | Web:      www.OpenFOAM.org                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+
+inlet
+{
+    type                 atmBoundaryLayerInletVelocity;
+    Uref                 10.0;
+    Zref                 0.5;
+    zDir                 (0 0 1);
+    flowDir              (1 0 0);
+    z0                   uniform 0.1;
+    zGround              uniform -0.82;
+    value                $internalField;
+}
+
+// ************************************************************************* //

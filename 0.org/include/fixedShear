@@ -1,0 +1,22 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  5.x                                   |
+|   \\  /    A nd           | Web:      www.OpenFOAM.org                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+
+inlet
+{
+    // Keep hub height velocity at 10 m/s
+    type            fixedProfile;
+    profile         polynomial
+    (
+        ((0 0 0)        (0 0 0))
+        ((12.195 0 0)    (1 0 0))
+    );
+    direction       (0 0 1);
+    origin          -0.82;
+}
+
+// ************************************************************************* //
