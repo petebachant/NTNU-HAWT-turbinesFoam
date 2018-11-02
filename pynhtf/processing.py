@@ -175,3 +175,19 @@ def load_exp_perf(turbine="turbine1", quantity="cp"):
     df.tsr *= R[turbine]/R["nominal"]
     df[quantity] *= A["nominal"]/A[turbine]
     return df
+
+
+def load_vel_probes():
+    """Load data from velocity probes."""
+    fpath = "postProcessing/probes/0/U"
+    def func():
+        with open(fpath) as f:
+            for line in f.readlines():
+                yield line.replace(")", "").replace("(", "")
+    data = np.genfromtxt(func())
+    ncols = data.shape[1]
+    df = pd.DataFrame(data=data, columns=["time", "u", "v", "w"])
+    df = df.set_index("time")
+    df["flow_angle"] = np.degrees(np.tan(df.v / df.u))
+    df["wind_speed"] = (df.u**2 + df.v**2)**0.5
+    return df

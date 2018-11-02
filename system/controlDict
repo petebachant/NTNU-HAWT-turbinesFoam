@@ -53,16 +53,16 @@ libs
 
 functions
 {
+    #includeFunc probes
     fieldAverage
     {
         type            fieldAverage;
         functionObjectLibs ("libfieldFunctionObjects.so");
         enabled         true;
         timeStart       1.0;
-        outputControl   outputTime;
+        writeControl   outputTime;
         resetOnRestart  true;
         resetOnOutput   false;
-
         fields
         (
             U
@@ -71,21 +71,18 @@ functions
                 prime2Mean  on;
                 base        time;
             }
-
             p
             {
                 mean        on;
                 prime2Mean  off;
                 base        time;
             }
-
             nut
             {
                 mean        on;
                 prime2Mean  off;
                 base        time;
             }
-
             k
             {
                 mean        on;
