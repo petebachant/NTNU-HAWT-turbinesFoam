@@ -31,10 +31,14 @@ def get_dt():
 def get_nacelle_ano_vals():
     """Lookup sampled nacelle anemometer values."""
     res = {}
-    # TODO
+    df = pr.load_nacelle_sets()
+    for idx, row in df.iterrows():
+        res[f"vel_mag_{idx}"] = row.vel_mag
+        res[f"vel_dir_{idx}"] = row.vel_dir
+    return res
 
 
-def log_results(param="turbine1_yaw", append=True):
+def log_results(param="turbine1_yaw", append=True, verbose=True):
     """Log results to CSV file."""
     if not os.path.isdir("processed"):
         os.mkdir("processed")
@@ -42,11 +46,18 @@ def log_results(param="turbine1_yaw", append=True):
     if append and os.path.isfile(fpath):
         df = pd.read_csv(fpath)
     else:
-        df = pd.DataFrame(columns=["nx", "ny", "nz", "dt", "tsr", "cp", "cd"])
+        df = pd.DataFrame()
     d = pr.calc_perf()
     d.update(get_mesh_dims())
     d["dt"] = get_dt()
-    # TODO: Add nacelle anemometer params and results
+    d["yaw"] = foampy.read_single_line_value(dictpath="system/fvOptions",
+                                             keyword="yawAngle")
+    # Add nacelle anemometer params and results
+    d.update(get_nacelle_ano_vals())
+    if verbose:
+        print("Logging results:")
+        for k, v in d.items():
+            print(f"    {k}: {v}")
     df = df.append(d, ignore_index=True)
     df.to_csv(fpath, index=False)
 
