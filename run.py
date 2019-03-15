@@ -253,8 +253,8 @@ if __name__ == "__main__":
                         help="Run multiple simulations varying a parameter",
                         choices=["turbine1_tsr", "turbine2_tsr",
                                  "turbine1_yaw", "turbine2_yaw"])
-    parser.add_argument("--start", default=-20, type=float)
-    parser.add_argument("--stop", default=21, type=float)
+    parser.add_argument("--start", default=-30, type=float)
+    parser.add_argument("--stop", default=31, type=float)
     parser.add_argument("--step", default=5, type=float)
     parser.add_argument("--serial", "-S", default=False, action="store_true")
     parser.add_argument("--append", "-a", default=False, action="store_true")
