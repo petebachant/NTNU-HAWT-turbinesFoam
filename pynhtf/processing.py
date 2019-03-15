@@ -193,9 +193,17 @@ def load_vel_probes():
     return df
 
 
+def rotate_vector(v, rad):
+    """Rotate a 2-D vector by rad radians."""
+    dc, ds = np.cos(rad), np.sin(rad)
+    x, y = v[0], v[1]
+    x, y = dc*x - ds*y, ds*x + dc*y
+    return np.array((x, y))
+
+
 def load_nacelle_sets():
     fpath = "postProcessing/sets/1.5/nacelle_UMean.csv"
     df = pd.read_csv(fpath)
     df["vel_mag"] = (df.UMean_0**2 + df.UMean_1**2 + df.UMean_2**2)**0.5
     df["vel_dir"] = np.degrees(np.arctan2(df.UMean_1, df.UMean_0))
-    return df
+    return df.drop_duplicates().reset_index(drop=True)

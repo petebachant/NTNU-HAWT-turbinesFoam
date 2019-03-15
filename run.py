@@ -84,18 +84,24 @@ def set_dt(dt=0.01, tsr=None, tsr_0=6.0, write_interval=None, les=False):
                          write_interval=write_interval)
 
 
-def gen_sets_file(origin=(0.1, 0.0, 0.1), delta=0.1, yaw=0):
+def gen_sets_file(origin=(0.1, 0.0, 0.04), step=0.01, yaw=None):
     """Generate ``sets`` file for post-processing nacelle anemometer
     locations.
     """
+    if yaw is None:
+        yaw = foampy.read_single_line_value(dictpath="system/fvOptions",
+                                            keyword="yawAngle")
     points_txt = ""
     points = [list(origin)]
-    for i in [0, 1, 2]:
-        for d in [0, 1, -1]:
-            p = list(origin)
-            p[i] += delta * d
-            if p not in points:
-                points.append(p)
+    for s in [-step, step]:
+        p = list(origin)
+        p[1] += s
+        points.append(p)
+    # Rotate all points about origin by ``yaw`` degrees
+    for p in points:
+        x, y = pr.rotate_vector((p[0], p[1]), np.radians(yaw))
+        p[0] = x
+        p[1] = y
     for p in points:
         points_txt += f"            ({p[0]} {p[1]} {p[2]})\n"
     foampy.fill_template("system/sets.template", points=points_txt)
