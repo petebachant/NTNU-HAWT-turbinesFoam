@@ -222,6 +222,11 @@ def run(turbine1_tsr=6, turbine1_active="on", turbine1_x=0,
         if parallel:
             foampy.run("reconstructParMesh", args="-constant -time 0", tee=tee)
     foampy.run("pimpleFoam", parallel=parallel, tee=tee, overwrite=overwrite)
+    # Sample nacelle values
+    gen_sets_file()
+    foampy.run("postProcess", args="-func sets -latestTime",
+               logname="log.sample", parallel=False, overwrite=overwrite,
+               tee=tee)
     if parallel and reconstruct:
         foampy.run("reconstructPar", tee=tee, overwrite=overwrite)
     if post:
