@@ -88,44 +88,17 @@ def gen_sets_file(origin=(0.1, 0.0, 0.1), delta=0.1, yaw=0):
     """Generate ``sets`` file for post-processing nacelle anemometer
     locations.
     """
-    # Input parameters
-    setformat = "raw"
-    interpscheme = "cellPoint"
-    fields = ["UMean"]
-    x = 1.0
-    ymax = 1.5
-    ymin = -1.5
-    zmax = 1.125
-    zmin = -1.125
-    z_array = np.linspace(zmin, zmax, nz)
-    txt = "\ntype sets;\n"
-    txt +='libs ("libsampling.so");\n'
-    txt += "setFormat " + setformat + ";\n"
-    txt += "interpolationScheme " + interpscheme + ";\n\n"
-    txt += "sets \n ( \n"
-    for z in z_array:
-        # Fix interpolation issues if directly on a face
-        if z == 0.0:
-            z += 1e-5
-        txt += "    " + "profile_" + str(z) + "\n"
-        txt += "    { \n"
-        txt += "        type        uniform; \n"
-        txt += "        axis        y; \n"
-        txt += "        start       (" + str(x) + " " + str(ymin) + " " \
-            + str(z) + ");\n"
-        txt += "        end         (" + str(x) + " " + str(ymax) + " " \
-            + str(z) + ");\n"
-        txt += "        nPoints     " + str(ny) + ";\n    }\n\n"
-    txt += ");\n\n"
-    txt += "fields \n(\n"
-    for field in fields:
-        txt += "    " + field + "\n"
-    txt += "); \n\n"
-    txt += "//\
-     *********************************************************************** //\
-     \n"
-    with open("system/sets", "w") as f:
-        f.write(txt)
+    points_txt = ""
+    points = [list(origin)]
+    for i in [0, 1, 2]:
+        for d in [0, 1, -1]:
+            p = list(origin)
+            p[i] += delta * d
+            if p not in points:
+                points.append(p)
+    for p in points:
+        points_txt += f"            ({p[0]} {p[1]} {p[2]})\n"
+    foampy.fill_template("system/sets.template", points=points_txt)
 
 
 def post_process(parallel=False, tee=False, reconstruct=False, overwrite=True):

@@ -191,3 +191,11 @@ def load_vel_probes():
     df["flow_angle"] = np.degrees(np.tan(df.v / df.u))
     df["wind_speed"] = (df.u**2 + df.v**2)**0.5
     return df
+
+
+def load_nacelle_sets():
+    fpath = "postProcessing/sets/1.5/nacelle_UMean.csv"
+    df = pd.read_csv(fpath)
+    df["vel_mag"] = (df.UMean_0**2 + df.UMean_1**2 + df.UMean_2**2)**0.5
+    df["vel_dir"] = np.degrees(np.arctan2(df.UMean_1, df.UMean_0))
+    return df
