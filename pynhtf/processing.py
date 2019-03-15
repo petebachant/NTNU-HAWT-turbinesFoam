@@ -6,6 +6,7 @@ import matplotlib.pyplot as plt
 import re
 import numpy as np
 import os
+import glob
 import sys
 import foampy
 from pxl import fdiff
@@ -202,7 +203,8 @@ def rotate_vector(v, rad):
 
 
 def load_nacelle_sets():
-    fpath = "postProcessing/sets/1.5/nacelle_UMean.csv"
+    d = sorted(glob.glob("postProcessing/sets/*"))[-1]
+    fpath = os.path.join(d, "nacelle_UMean.csv")
     df = pd.read_csv(fpath)
     df["vel_mag"] = (df.UMean_0**2 + df.UMean_1**2 + df.UMean_2**2)**0.5
     df["vel_dir"] = np.degrees(np.arctan2(df.UMean_1, df.UMean_0))
