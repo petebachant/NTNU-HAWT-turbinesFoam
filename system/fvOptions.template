@@ -32,7 +32,7 @@ turbine1
         freeStreamVelocity  (10 0 0);
         tipSpeedRatio       {turbine1_tsr};
         rotorRadius         0.472;
-        yawAngle            0;
+        yawAngle            {turbine1_yaw};
 
         dynamicStall
         {{
@@ -155,6 +155,7 @@ turbine2
         freeStreamVelocity  (10 0 0);
         tipSpeedRatio       {turbine2_tsr};
         rotorRadius         0.447;
+        yawAngle            {turbine2_yaw};
 
         dynamicStall
         {{
