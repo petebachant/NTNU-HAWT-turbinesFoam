@@ -246,6 +246,8 @@ if __name__ == "__main__":
     parser.add_argument("--turbine2-yaw", default=0.0, type=float)
     parser.add_argument("--leave-mesh", "-l", default=False,
                         action="store_true", help="Leave existing mesh")
+    parser.add_argument("--no-reconstruct", default=False, action="store_true",
+                        help="Do not reconstruct mesh and fields")
     parser.add_argument("--post", "-P", default=False, action="store_true",
                         help="Run post-processing (done by default at end of "
                              " run)")
@@ -284,6 +286,7 @@ if __name__ == "__main__":
             turbine2_tsr=args.turbine2_tsr,
             turbine2_x=args.turbine2_x,
             turbine2_yaw=args.turbine2_yaw,
+            reconstruct=not args.no_reconstruct,
             parallel=not args.serial,
             tee=args.tee,
             mesh=not args.leave_mesh,
